@@ -3,8 +3,6 @@
     "version": "1.0.1",
     "type": "module",
     "description": "",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
     "scripts": {
         "start": "ts-node-dev --respawn --cls --exit-child --ignore-watch node_modules app.ts"
     },
@@ -27,8 +25,5 @@
     },
     "_moduleAliases": {
         "@util": "./src"
-    },
-    "files": [
-        "/dist"
-    ]
+    }
 }
