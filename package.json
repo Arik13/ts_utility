@@ -25,5 +25,8 @@
     },
     "_moduleAliases": {
         "@util": "./src"
-    }
+    },
+    "files": [
+        "/dist"
+    ]
 }
