@@ -3,8 +3,7 @@
     "version": "1.0.7",
     "description": "",
     "scripts": {
-        "start": "ts-node-dev --respawn --cls --exit-child --ignore-watch node_modules app.ts",
-        "build": "./build"
+        "start": "ts-node-dev --respawn --cls --exit-child --ignore-watch node_modules app.ts"
     },
     "author": "Arik Dicks",
     "license": "ISC",
