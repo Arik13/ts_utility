@@ -1,7 +1,16 @@
-export declare class Map2<U> extends Map<string, U> {
-    constructor();
-    arrayMap<V>(cb: (val?: U, key?: string) => V): V[];
-    toArray(): U[];
-    fromArray(array: U[], keyName?: string | "id"): this;
-    fromArray2(array: U[], func: (item: U) => string): this;
+import { Key } from "@util/Types";
+export {};
+declare type IdObj = {
+    id: Key;
+};
+interface MapExtension<K, V> {
+    arrayMap<V>(this: Map<K, V>, cb: (val?: V, key?: K) => V): V[];
+    toArray(this: Map<K, V>): V[];
+    fromArray<T extends IdObj>(this: Map<K, V>, array: T[]): Map<string, T>;
+    fromArray<T>(this: Map<K, V>, array: T[], keyName: string): Map<K, V>;
+    fromArray2(this: Map<K, V>, array: V[], func: (item: V) => K): Map<K, V>;
+}
+declare global {
+    interface Map<K, V> extends MapExtension<K, V> {
+    }
 }

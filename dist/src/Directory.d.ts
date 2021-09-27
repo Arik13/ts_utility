@@ -18,8 +18,8 @@ export declare class DirectoryMap extends Map2<Directory> {
     traverse(visit: (dir: Directory, dirMap?: DirectoryMap) => void, rootID?: string): void;
     traversePath(visit: (dir: Directory, path: string, dirMap?: DirectoryMap) => void): void;
     add(dir: Directory): Directory;
-    set(id: string, dir: Directory): this;
-    delete(id: string): boolean;
+    set(id: string, dir: Directory): any;
+    delete(id: string): any;
     createAssetDir(asset: {
         id?: string;
         name?: string;
