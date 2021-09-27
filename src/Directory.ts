@@ -1,5 +1,5 @@
 import * as mong from "mongoose";
-import { Map2 } from "./DataStructures/Map";
+// import { Map2 } from "./DataStructures/Map";
 
 export interface Directory {
     id?: string,
@@ -13,7 +13,7 @@ export interface Directory {
 
 export const genID = () => new mong.Types.ObjectId().toString();
 
-export class DirectoryMap extends Map2<Directory> {
+export class DirectoryMap extends Map<string, Directory> {
     root: Directory;
     constructor() {
         super();

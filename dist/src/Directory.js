@@ -2,10 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DirectoryMap = exports.genID = void 0;
 const mong = require("mongoose");
-const Map_1 = require("./DataStructures/Map");
 const genID = () => new mong.Types.ObjectId().toString();
 exports.genID = genID;
-class DirectoryMap extends Map_1.Map2 {
+class DirectoryMap extends Map {
     constructor() {
         super();
         this.root = {
