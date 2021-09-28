@@ -9,7 +9,8 @@ export class AutoSyncQueue {
     dequeue() {
         if (!this.queue.length) return;
         (async () => {
-            await this.queue.shift()();
+            await this.queue[0]();
+            this.queue.shift();
             this.dequeue();
         })();
     }

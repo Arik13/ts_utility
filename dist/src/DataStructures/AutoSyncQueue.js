@@ -24,7 +24,8 @@ class AutoSyncQueue {
         if (!this.queue.length)
             return;
         (() => __awaiter(this, void 0, void 0, function* () {
-            yield this.queue.shift()();
+            yield this.queue[0]();
+            this.queue.shift();
             this.dequeue();
         }))();
     }
