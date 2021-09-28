@@ -39,7 +39,7 @@ import { extendPrototype } from "./ExtendPrototype";
 export {}
 
 type IdObj = {
-    id: Key,
+    id?: Key,
     // [key: Key]: any,
 }
 

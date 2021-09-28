@@ -1,7 +1,7 @@
 import { Key } from "@util/Types";
 export {};
 declare type IdObj = {
-    id: Key;
+    id?: Key;
 };
 interface MapExtension<K, V> {
     arrayMap<T>(this: Map<K, V>, cb: (val?: V, key?: K) => T): T[];
