@@ -8,10 +8,10 @@ export interface Directory {
     path?: string;
 }
 export declare const genID: () => string;
-export declare class DirectoryMap {
+export declare class DirectoryMap extends Map<string, Directory> {
     root: Directory;
     idMap: Map<string, Directory>;
-    pathMap: Map<string, Directory>;
+    pathMap: Map<string, string>;
     constructor();
     init(root: Directory): this;
     move(moveID: string, targetID: string): boolean;
@@ -20,9 +20,7 @@ export declare class DirectoryMap {
     traverse(visit: (dir: Directory, dirMap?: DirectoryMap) => void, rootID?: string): void;
     traversePath(visit: (dir: Directory, path: string, dirMap?: DirectoryMap) => void): void;
     add(dir: Directory): Directory;
-    set(id: string, dir: Directory): void;
-    get(idOrPath: string): Directory;
-    has(idOrPath: string): boolean;
+    set(id: string, dir: Directory): this;
     delete(id: string): boolean;
     createAssetDir(asset: {
         id?: string;

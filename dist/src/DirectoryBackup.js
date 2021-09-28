@@ -4,25 +4,24 @@ exports.DirectoryMap = exports.genID = void 0;
 const mong = require("mongoose");
 const genID = () => new mong.Types.ObjectId().toString();
 exports.genID = genID;
-class DirectoryMap {
+class DirectoryMap extends Map {
     constructor() {
+        super();
         this.idMap = new Map();
         this.pathMap = new Map();
         this.root = {
             id: (0, exports.genID)(),
             name: "root",
             children: [],
-            path: "./root",
             parentID: null,
             itemID: null,
         };
-        this.idMap.set(this.root.id, this.root);
+        super.set(this.root.id, this.root);
     }
     init(root) {
-        this.idMap.clear();
+        this.clear();
         this.root = root;
-        this.traverse(dir => this.set(dir.id, dir));
-        // this.traversePath(dir => this.idMap.set(dir.id, dir));
+        this.traverse(dir => super.set(dir.id, dir));
         return this;
     }
     move(moveID, targetID) {
@@ -85,16 +84,7 @@ class DirectoryMap {
     set(id, dir) {
         let parent = this.get(dir.parentID);
         parent.children.push(dir);
-        this.idMap.set(id, dir);
-        dir.path = `${parent.path}/${dir.name}`;
-        this.pathMap.set(dir.path, dir);
-    }
-    get(idOrPath) {
-        var _a;
-        return (_a = this.idMap.get(idOrPath)) !== null && _a !== void 0 ? _a : this.pathMap.get(idOrPath);
-    }
-    has(idOrPath) {
-        return this.idMap.has(idOrPath) || this.pathMap.has(idOrPath);
+        return super.set(id, dir);
     }
     delete(id) {
         let dir = this.get(id);
@@ -102,7 +92,7 @@ class DirectoryMap {
         dir.parentID = null;
         let childIndex = parent.children.findIndex(subDir => dir.id == subDir.id);
         parent.children.splice(childIndex, 1);
-        return this.idMap.delete(dir.id);
+        return super.delete(dir.id);
     }
     createAssetDir(asset, parentID) {
         let dir = {
@@ -132,4 +122,4 @@ class DirectoryMap {
     }
 }
 exports.DirectoryMap = DirectoryMap;
-//# sourceMappingURL=Directory.js.map
+//# sourceMappingURL=DirectoryBackup.js.map

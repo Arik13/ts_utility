@@ -13,26 +13,26 @@ export interface Directory {
 
 export const genID = () => new mong.Types.ObjectId().toString();
 
-export class DirectoryMap extends Map<string, Directory> {
+export class DirectoryMap {
     root: Directory;
+    idMap = new Map<string, Directory>();
+    pathMap = new Map<string, Directory>();
     constructor() {
-        super();
         this.root = {
             id: genID(),
             name: "root",
             children: [],
+            path: "./root",
             parentID: null,
             itemID: null,
         };
-        super.set(this.root.id, this.root);
+        this.idMap.set(this.root.id, this.root);
     }
     init(root: Directory) {
-        this.clear();
+        this.idMap.clear();
         this.root = root;
-
-        this.traverse(dir => {
-            super.set(dir.id, dir);
-        });
+        this.traverse(dir => this.set(dir.id, dir));
+        // this.traversePath(dir => this.idMap.set(dir.id, dir));
         return this;
     }
     move(moveID: string, targetID: string) {
@@ -54,6 +54,11 @@ export class DirectoryMap extends Map<string, Directory> {
         move.parentID = target.id;
         return true;
     }
+    initPaths() {
+        let nameLength = this.root.name.length + 1;
+        this.traversePath((dir, path) => dir.path = `.${path.substring(nameLength)}`);
+        return this;
+    }
     isAncestor(superNode: Directory, subNode: Directory): boolean {
         if (superNode.id == subNode.id) return true;
         if (!subNode.parentID) return false;
@@ -62,9 +67,7 @@ export class DirectoryMap extends Map<string, Directory> {
     traverse(visit: (dir: Directory, dirMap?: DirectoryMap) => void, rootID?: string) {
         const inner = (dir: Directory, visit: (dir: Directory, dirMap?: DirectoryMap) => void) => {
             visit(dir, this);
-            dir.children.forEach(subDir => {
-                inner(subDir, visit);
-            });
+            dir.children.forEach(subDir => inner(subDir, visit));
         }
         inner(this.get(rootID) ?? this.root, visit);
     }
@@ -74,9 +77,7 @@ export class DirectoryMap extends Map<string, Directory> {
             pathStack.push(dir.name);
             let path = "/" + pathStack.reduce((p, c) => `${p}/${c}`);
             visit(dir, path, this);
-            dir.children.forEach(subDir => {
-                inner(subDir, visit);
-            });
+            dir.children.forEach(subDir => inner(subDir, visit));
             pathStack.pop();
         }
         inner(this.root, visit);
@@ -89,7 +90,15 @@ export class DirectoryMap extends Map<string, Directory> {
     set(id: string, dir: Directory) {
         let parent = this.get(dir.parentID);
         parent.children.push(dir);
-        return super.set(id, dir);
+        this.idMap.set(id, dir);
+        dir.path = `${parent.path}/${dir.name}`;
+        this.pathMap.set(dir.path, dir);
+    }
+    get(idOrPath: string) {
+        return this.idMap.get(idOrPath) ?? this.pathMap.get(idOrPath);
+    }
+    has(idOrPath: string) {
+        return this.idMap.has(idOrPath) || this.pathMap.has(idOrPath);
     }
     delete(id: string) {
         let dir = this.get(id);
@@ -97,7 +106,7 @@ export class DirectoryMap extends Map<string, Directory> {
         dir.parentID = null;
         let childIndex = parent.children.findIndex(subDir => dir.id == subDir.id);
         parent.children.splice(childIndex, 1);
-        return super.delete(dir.id);
+        return this.idMap.delete(dir.id);
     }
     createAssetDir(asset: {id?: string, name?: string, dirID?: string}, parentID: string) {
         let dir: Directory = {
