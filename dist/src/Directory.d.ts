@@ -1,3 +1,4 @@
+export declare const genID: () => string;
 export interface Directory {
     id?: string;
     name: string;
@@ -7,23 +8,25 @@ export interface Directory {
     isOpen?: boolean;
     path?: string;
 }
-export declare const genID: () => string;
 export declare class DirectoryMap {
     root: Directory;
     idMap: Map<string, Directory>;
     pathMap: Map<string, Directory>;
-    constructor();
-    init(root: Directory): this;
+    constructor(root?: Directory);
+    reset(root: Directory): this;
     move(moveID: string, targetID: string): boolean;
-    initPaths(): this;
     isAncestor(superNode: Directory, subNode: Directory): boolean;
     traverse(visit: (dir: Directory, dirMap?: DirectoryMap) => void, rootID?: string): void;
-    traversePath(visit: (dir: Directory, path: string, dirMap?: DirectoryMap) => void): void;
+    visitAssets(visit: (dir: Directory, dirMap?: DirectoryMap) => void, rootID?: string): void;
+    mapAssets<T>(cb: (dir: Directory, dirMap?: DirectoryMap) => T, rootID?: string): T[];
+    private initPaths;
     add(dir: Directory): Directory;
-    set(id: string, dir: Directory): void;
+    private setRoot;
+    set(dir: Directory): Directory;
     get(idOrPath: string): Directory;
     has(idOrPath: string): boolean;
-    delete(id: string): boolean;
+    map<T>(cb: (dir: Directory) => T, idOrPath?: string): T[];
+    delete(id: string): void;
     createAssetDir(asset: {
         id?: string;
         name?: string;

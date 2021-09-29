@@ -1,5 +1,6 @@
 import * as mong from "mongoose";
-// import { Map2 } from "./DataStructures/Map";
+
+export const genID = () => new mong.Types.ObjectId().toString();
 
 export interface Directory {
     id?: string,
@@ -11,28 +12,18 @@ export interface Directory {
     path?: string;
 }
 
-export const genID = () => new mong.Types.ObjectId().toString();
-
 export class DirectoryMap {
     root: Directory;
     idMap = new Map<string, Directory>();
     pathMap = new Map<string, Directory>();
-    constructor() {
-        this.root = {
-            id: genID(),
-            name: "root",
-            children: [],
-            path: "./root",
-            parentID: null,
-            itemID: null,
-        };
-        this.idMap.set(this.root.id, this.root);
+    constructor(root?: Directory) {
+        this.reset(root);
     }
-    init(root: Directory) {
+    reset(root: Directory) {
         this.idMap.clear();
-        this.root = root;
-        this.traverse(dir => this.set(dir.id, dir));
-        // this.traversePath(dir => this.idMap.set(dir.id, dir));
+        this.pathMap.clear();
+        this.setRoot(root);
+        this.initPaths();
         return this;
     }
     move(moveID: string, targetID: string) {
@@ -54,45 +45,59 @@ export class DirectoryMap {
         move.parentID = target.id;
         return true;
     }
-    initPaths() {
-        let nameLength = this.root.name.length + 1;
-        this.traversePath((dir, path) => dir.path = `.${path.substring(nameLength)}`);
-        return this;
-    }
     isAncestor(superNode: Directory, subNode: Directory): boolean {
         if (superNode.id == subNode.id) return true;
         if (!subNode.parentID) return false;
         return this.isAncestor(superNode, this.get(subNode.parentID));
     }
     traverse(visit: (dir: Directory, dirMap?: DirectoryMap) => void, rootID?: string) {
-        const inner = (dir: Directory, visit: (dir: Directory, dirMap?: DirectoryMap) => void) => {
-            visit(dir, this);
-            dir.children.forEach(subDir => inner(subDir, visit));
-        }
-        inner(this.get(rootID) ?? this.root, visit);
+        (function inner(dir: Directory, dirMap: DirectoryMap) {
+            visit(dir, dirMap);
+            dir.children.forEach(subDir => inner(subDir, dirMap));
+        })(this.get(rootID) ?? this.root, this);
     }
-    traversePath(visit: (dir: Directory, path: string, dirMap?: DirectoryMap) => void) {
+    visitAssets(visit: (dir: Directory, dirMap?: DirectoryMap) => void, rootID?: string) {
+        let root = this.get(rootID) ?? this.root;
+        this.traverse(dir => {if (dir.itemID) visit(dir, this)}, root.id);
+    }
+    mapAssets<T>(cb: (dir: Directory, dirMap?: DirectoryMap) => T, rootID?: string) {
+        let assets: Directory[] = [];
+        this.visitAssets(dir => assets.push(dir), rootID);
+        return assets.map(dir => cb(dir, this));
+    }
+    private initPaths() {
         let pathStack: string[] = [];
-        const inner = (dir: Directory, visit: (dir: Directory, path?: string, dirMap?: DirectoryMap) => void) => {
+        (function inner(dir: Directory, dirMap: DirectoryMap) {
             pathStack.push(dir.name);
-            let path = "/" + pathStack.reduce((p, c) => `${p}/${c}`);
-            visit(dir, path, this);
-            dir.children.forEach(subDir => inner(subDir, visit));
+            dirMap.idMap.set(dir.id, dir);
+            let path = pathStack.join("/");
+            dir.path = path;
+            dirMap.pathMap.set(path, dir);
+            dir.children.forEach(subDir => inner(subDir, dirMap));
             pathStack.pop();
-        }
-        inner(this.root, visit);
+        })(this.root, this);
     }
     add(dir: Directory) {
-        if (this.has(dir.id)) return;
-        this.set(dir.id, dir);
-        return dir;
+        return this.has(dir.id)? null : this.set(dir);
     }
-    set(id: string, dir: Directory) {
+    private setRoot(dir?: Directory) {
+        this.root = {
+            id: genID(),
+            name: "",
+            children: dir?.children ?? [],
+            parentID: null,
+            itemID: null,
+        };
+        this.idMap.set(this.root.id, this.root);
+        return this.root;
+    }
+    set(dir: Directory) {
         let parent = this.get(dir.parentID);
         parent.children.push(dir);
-        this.idMap.set(id, dir);
+        this.idMap.set(dir.id, dir);
         dir.path = `${parent.path}/${dir.name}`;
         this.pathMap.set(dir.path, dir);
+        return dir;
     }
     get(idOrPath: string) {
         return this.idMap.get(idOrPath) ?? this.pathMap.get(idOrPath);
@@ -100,36 +105,46 @@ export class DirectoryMap {
     has(idOrPath: string) {
         return this.idMap.has(idOrPath) || this.pathMap.has(idOrPath);
     }
+    map<T>(cb: (dir: Directory) => T, idOrPath?: string): T[] {
+        let root = this.get(idOrPath) ?? this.root;
+        let array: T[] = [];
+        this.traverse(dir => array.push(cb(dir)), root.id);
+        return array;
+    }
     delete(id: string) {
         let dir = this.get(id);
+        if (!dir) return;
         let parent = this.get(dir.parentID);
+        if (!parent) return;
+        let dirKeys = this.map(d => [d.id, d.path], dir.id);
+        dirKeys.forEach(([id, path]) => {
+            this.idMap.delete(id);
+            this.pathMap.delete(path);
+        });
         dir.parentID = null;
         let childIndex = parent.children.findIndex(subDir => dir.id == subDir.id);
         parent.children.splice(childIndex, 1);
-        return this.idMap.delete(dir.id);
+        this.idMap.delete(dir.id);
+        this.pathMap.delete(dir.path);
     }
     createAssetDir(asset: {id?: string, name?: string, dirID?: string}, parentID: string) {
-        let dir: Directory = {
-            id: genID(),
+        asset.dirID = genID();
+        return this.set({
+            id: asset.dirID,
             name: asset.name,
             children: [],
             parentID,
             itemID: asset.id,
-        }
-        this.set(dir.id, dir);
-        asset.dirID = dir.id;
-        return dir;
+        });
     }
     createDir(name: string, parentID: string) {
-        let dir: Directory = {
+        return this.set({
             id: genID(),
             name,
             children: [],
             parentID,
             itemID: null,
-        }
-        this.set(dir.id, dir);
-        return dir;
+        });
     }
     rename(id: string, name: string) {
         this.get(id).name = name;
