@@ -3,7 +3,11 @@
     "version": "1.0.16",
     "description": "",
     "scripts": {
-        "start": "ts-node-dev --respawn --cls --exit-child --ignore-watch node_modules app.ts"
+        "start": "ts-node-dev --respawn --cls --exit-child --ignore-watch node_modules app.ts",
+        "update": "",
+        "test": "tsc --noEmit",
+        "build": "tsc",
+        "clean": "rd -Recurse -Force dist"
     },
     "author": "Arik Dicks",
     "license": "ISC",
@@ -20,7 +24,7 @@
         "nodemon": "^2.0.4",
         "ts-node": "^8.10.1",
         "ts-node-dev": "^1.0.0-pre.44",
-        "typescript": "^3.9.2"
+        "typescript": "^4.3.2"
     },
     "_moduleAliases": {
         "@util": "./src"

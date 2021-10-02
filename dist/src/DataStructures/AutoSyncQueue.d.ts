@@ -1,5 +1,5 @@
 export declare class AutoSyncQueue {
-    queue: (() => Promise<void>)[];
-    enqueue(task: () => Promise<void>): void;
+    queue: (() => Promise<any>)[];
+    enqueue(task: () => Promise<any>): void;
     dequeue(): void;
 }

@@ -1,6 +1,6 @@
 export class AutoSyncQueue {
-    queue: (() => Promise<void>)[] = [];
-    enqueue(task: () => Promise<void>) {
+    queue: (() => Promise<any>)[] = [];
+    enqueue(task: () => Promise<any>) {
         this.queue.push(task);
         if (this.queue.length == 1) {
             this.dequeue();
