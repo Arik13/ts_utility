@@ -46,9 +46,10 @@ type IdObj = {
 interface MapExtension<K, V> {
     arrayMap<T>(this: Map<K, V>, cb: (val?: V, key?: K) => T): T[];
     toArray(this: Map<K, V>): V[];
-    fromArray<T extends IdObj>(this: Map<K, V>, array: T[]): Map<string, T>;
+    fromArray<T extends (IdObj | V)>(this: Map<K, V>, array: T[]): Map<string, T>;
     fromArray<T>(this: Map<K, V>, array: T[], keyName: string): Map<K, V>;
     fromArray2(this: Map<K, V>, array: V[], func: (item: V) => K): Map<K, V>;
+    map<V2>(this: Map<K, V>, cb: (val?: V2, key?: K, map?: Map<K, V>) => any): Map<K, V2>;
 }
 
 declare global {
@@ -78,6 +79,11 @@ let methods: MapExtension<any, any> = {
         this.clear();
         array.forEach(el => this.set(func(el), el));
         return this;
+    },
+    map(this: Map<any, any>, cb: (val?: any, key?: any, map?: Map<any, any>) => any) {
+        let map = new Map<any, any>();
+        this.forEach((v, k) => map.set(k, cb(v, k, this)))
+        return map;
     }
 }
 extendPrototype(Map.prototype, methods);

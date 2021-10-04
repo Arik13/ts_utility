@@ -58,6 +58,11 @@ let methods = {
         this.clear();
         array.forEach(el => this.set(func(el), el));
         return this;
+    },
+    map(cb) {
+        let map = new Map();
+        this.forEach((v, k) => map.set(k, cb(v, k, this)));
+        return map;
     }
 };
 (0, ExtendPrototype_1.extendPrototype)(Map.prototype, methods);
