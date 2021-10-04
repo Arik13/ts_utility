@@ -1,19 +1,15 @@
-export {}
-import "./Set";
-import { Primitive } from "../Types";
-import { extendPrototype } from "./ExtendPrototype";
-let prims = ["string", "number", "boolean"];
+import { extendPrototypeFromClassObj } from "./ExtendPrototype";
 
-let functionMethods = {
-    get _() {
-        return "testing";
+export {}
+
+class Extension {
+    _<T, U, V>(this: (...args: T[]) => U, func: (arg: U) => V) {
+        return (...args: T[]) => func(this(...args));
     }
 }
 
-type FunctionExtension = typeof functionMethods;
-
 declare global {
-    interface Function extends FunctionExtension {}
+    interface Function extends Extension {}
 }
 
-extendPrototype(Function.prototype, functionMethods);
+extendPrototypeFromClassObj(Function.prototype, new Extension());

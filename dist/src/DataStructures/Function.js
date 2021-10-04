@@ -1,12 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./Set");
 const ExtendPrototype_1 = require("./ExtendPrototype");
-let prims = ["string", "number", "boolean"];
-let functionMethods = {
-    get _() {
-        return "testing";
+class Extension {
+    _(func) {
+        return (...args) => func(this(...args));
     }
-};
-(0, ExtendPrototype_1.extendPrototype)(Function.prototype, functionMethods);
+}
+(0, ExtendPrototype_1.extendPrototypeFromClassObj)(Function.prototype, new Extension());
 //# sourceMappingURL=Function.js.map

@@ -1,10 +1,8 @@
 export {};
-import "./Set";
-declare let functionMethods: {
-    readonly _: string;
-};
-declare type FunctionExtension = typeof functionMethods;
+declare class Extension {
+    _<T, U, V>(this: (...args: T[]) => U, func: (arg: U) => V): (...args: T[]) => V;
+}
 declare global {
-    interface Function extends FunctionExtension {
+    interface Function extends Extension {
     }
 }
