@@ -24,6 +24,7 @@ export declare class JSONMonad extends Monad<any> {
     visit(predicate: (arg: Arg) => boolean, visitor: AnyMap): JSONMonad;
     visitKeys(key: Key, visitor: (arg: Arg) => void): JSONMonad;
     visitOpts(opts: Options, visitor: (arg: Arg) => void): JSONMonad;
+    filter(predicate: (arg: Arg) => boolean): JSONMonad;
     anyMap(map: AnyMap): JSONMonad;
     predicateMap(predicate: (arg: Arg) => boolean, map: AnyMap): JSONMonad;
     primMap(map: (arg: Arg<Primitive>) => Primitive): JSONMonad;

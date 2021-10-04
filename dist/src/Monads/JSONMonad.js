@@ -68,6 +68,9 @@ class JSONMonad extends Monads_1.Monad {
     visitOpts(opts, visitor) {
         return this.traverse(x => this.optionPredicate(x, opts) ? visitor(x) : 0);
     }
+    filter(predicate) {
+        return this.anyMap(x => predicate(x) ? x.val : undefined);
+    }
     anyMap(map) {
         return JSONMonad.new(anyMapper(map, this.clone()));
     }

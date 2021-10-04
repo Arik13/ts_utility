@@ -84,6 +84,9 @@ export class JSONMonad extends Monad<any> {
     visitOpts(opts: Options, visitor: (arg: Arg) => void) {
         return this.traverse(x => this.optionPredicate(x, opts)? visitor(x) : 0);
     }
+    filter(predicate: (arg: Arg) => boolean) {
+        return this.anyMap(x => predicate(x)? x.val : undefined);
+    }
     anyMap(map: AnyMap) {
         return JSONMonad.new(anyMapper(map, this.clone()));
     }
