@@ -1,38 +1,3 @@
-// export class Map2<U> extends Map<string, U> {
-//     constructor() {
-//         super();
-//     }
-//     arrayMap<V>(cb: (val?: U, key?: string) => V) {
-//         let array: V[] = [];
-//         this.forEach((val, key) => array.push(cb(val, key)));
-//         return array;
-//     }
-//     toArray() {
-//         let array: U[] = [];
-//         this.forEach(val => array.push(val));
-//         return array;
-//     }
-//     fromArray(array: U[], keyName?: string | "id")  {
-//         this.clear();
-//         keyName = keyName ?? "id";
-//         array.forEach(el => {
-//             let key = (el as any)[keyName];
-//             this.set(key, el);
-//         });
-//         return this;
-//     }
-//     fromArray2(array: U[], func: (item: U) => string)  {
-//         this.clear();
-//         // keyName = keyName ?? "id";
-//         array.forEach(el => {
-//             // let key = (el as any)[keyName];
-//             let key = func(el);
-//             this.set(key, el);
-//         });
-//         return this;
-//     }
-// }
-
 import { Key } from "@util/Types";
 import { extendPrototype } from "./ExtendPrototype";
 
@@ -40,7 +5,6 @@ export {}
 
 type IdObj = {
     id?: Key,
-    // [key: Key]: any,
 }
 
 interface MapExtension<K, V> {
@@ -49,7 +13,7 @@ interface MapExtension<K, V> {
     fromArray<T extends (IdObj | V)>(this: Map<K, V>, array: T[]): Map<string, T>;
     fromArray<T>(this: Map<K, V>, array: T[], keyName: string): Map<K, V>;
     fromArray2(this: Map<K, V>, array: V[], func: (item: V) => K): Map<K, V>;
-    map<V2>(this: Map<K, V>, cb: (val?: V2, key?: K, map?: Map<K, V>) => any): Map<K, V2>;
+    map<V2>(this: Map<K, V>, cb: (val?: V, key?: K, map?: Map<K, V>) => any): Map<K, V2>;
 }
 
 declare global {
