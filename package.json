@@ -7,7 +7,7 @@
         "update": "",
         "test": "tsc --noEmit",
         "build": "tsc",
-        "clean": "rd -Recurse -Force dist"
+        "clean": "Remove-Item -Recurse -Force dist"
     },
     "author": "Arik Dicks",
     "license": "ISC",
