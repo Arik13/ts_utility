@@ -33,7 +33,7 @@ export declare class DirectoryMap {
         id?: string;
         name?: string;
         dirID?: string;
-    }, parentID: string): Directory;
+    }, ext: string, parentID: string): Directory;
     createDir(name: string, parentID: string): Directory;
     rename(id: string, name: string): void;
 }

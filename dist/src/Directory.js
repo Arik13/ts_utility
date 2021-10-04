@@ -129,7 +129,7 @@ class DirectoryMap {
         this.idMap.delete(dir.id);
         this.pathMap.delete(dir.path);
     }
-    createAssetDir(asset, parentID) {
+    createAssetDir(asset, ext, parentID) {
         asset.dirID = (0, exports.genID)();
         return this.set({
             id: asset.dirID,
@@ -137,6 +137,7 @@ class DirectoryMap {
             children: [],
             parentID,
             itemID: asset.id,
+            ext,
         });
     }
     createDir(name, parentID) {

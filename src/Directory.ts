@@ -3,7 +3,7 @@ import * as mong from "mongoose";
 export const genID = () => new mong.Types.ObjectId().toString();
 
 export interface Directory {
-    id?: string,
+    id?: string;
     name: string;
     parentID: string;
     children: Directory[];
@@ -129,7 +129,7 @@ export class DirectoryMap {
         this.idMap.delete(dir.id);
         this.pathMap.delete(dir.path);
     }
-    createAssetDir(asset: {id?: string, name?: string, dirID?: string}, parentID: string) {
+    createAssetDir(asset: {id?: string, name?: string, dirID?: string}, ext: string, parentID: string) {
         asset.dirID = genID();
         return this.set({
             id: asset.dirID,
@@ -137,6 +137,7 @@ export class DirectoryMap {
             children: [],
             parentID,
             itemID: asset.id,
+            ext,
         });
     }
     createDir(name: string, parentID: string) {
