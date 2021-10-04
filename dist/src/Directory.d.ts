@@ -7,6 +7,8 @@ export interface Directory {
     itemID: string;
     isOpen?: boolean;
     path?: string;
+    base?: string;
+    ext?: string;
 }
 export declare class DirectoryMap {
     root: Directory;

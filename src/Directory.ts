@@ -10,6 +10,8 @@ export interface Directory {
     itemID: string;
     isOpen?: boolean;
     path?: string;
+    base?: string;
+    ext?: string;
 }
 
 export class DirectoryMap {
