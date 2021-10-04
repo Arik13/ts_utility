@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const ExtendPrototype_1 = require("./ExtendPrototype");
-let methods = {
+class Extension {
     isSuperset(subset) {
         for (let elem of subset) {
             if (!this.has(elem)) {
@@ -9,14 +9,14 @@ let methods = {
             }
         }
         return true;
-    },
+    }
     union(setB) {
         let union = new Set(this);
         for (let elem of setB) {
             union.add(elem);
         }
         return union;
-    },
+    }
     intersection(setB) {
         let intersection = new Set();
         for (let elem of setB) {
@@ -25,7 +25,7 @@ let methods = {
             }
         }
         return intersection;
-    },
+    }
     symmetricDifference(setB) {
         let difference = new Set(this);
         for (let elem of setB) {
@@ -37,7 +37,7 @@ let methods = {
             }
         }
         return difference;
-    },
+    }
     difference(setB) {
         let difference = new Set(this);
         for (let elem of setB) {
@@ -45,6 +45,7 @@ let methods = {
         }
         return difference;
     }
-};
-(0, ExtendPrototype_1.extendPrototype)(Set.prototype, methods);
+}
+;
+(0, ExtendPrototype_1.extendPrototypeFromClassObj)(Set.prototype, new Extension());
 //# sourceMappingURL=Set.js.map

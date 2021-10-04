@@ -16,16 +16,16 @@ class ArraySetData {
         return this.array[this.indexDict[key]];
     }
 }
-let arrayMethods = {
+class Extension {
     cross(array) {
         let cartesian = (...a) => a.reduce((a, b) => a.flatMap(d => b.map(e => [d, e].flat())));
         return cartesian(this, array);
-    },
+    }
     merge(array) {
         if (this.length != array.length)
             throw new Error("Cannot merge arrays of unequal length!");
         return this.map((x, i) => [x, array[i]]);
-    },
+    }
     equals(b, pred) {
         if (this.length != b.length)
             return false;
@@ -35,7 +35,7 @@ let arrayMethods = {
                 return false;
         }
         return true;
-    },
+    }
     // SET OPERATIONS
     diff(array) {
         if (this[0] && prims.includes(typeof this[0]) || this[1] && prims.includes(typeof this[1])) {
@@ -47,7 +47,7 @@ let arrayMethods = {
             let diffSet = a.toSet().difference(b.toSet());
             return Array.from(diffSet).map(x => { var _a; return (_a = a.get(x)) !== null && _a !== void 0 ? _a : b.get(x); });
         }
-    },
+    }
     symDiff(array) {
         if (this[0] && prims.includes(typeof this[0]) || this[1] && prims.includes(typeof this[1])) {
             return Array.from(new Set(this).symmetricDifference(new Set(array)));
@@ -58,7 +58,7 @@ let arrayMethods = {
             let diffSet = a.toSet().symmetricDifference(b.toSet());
             return Array.from(diffSet).map(x => { var _a; return (_a = a.get(x)) !== null && _a !== void 0 ? _a : b.get(x); });
         }
-    },
+    }
     intersect(array) {
         if (this[0] && prims.includes(typeof this[0]) || this[1] && prims.includes(typeof this[1])) {
             return Array.from(new Set(this).intersection(new Set(array)));
@@ -69,7 +69,7 @@ let arrayMethods = {
             let diffSet = a.toSet().intersection(b.toSet());
             return Array.from(diffSet).map(x => { var _a; return (_a = a.get(x)) !== null && _a !== void 0 ? _a : b.get(x); });
         }
-    },
+    }
     union(array) {
         if (this[0] && prims.includes(typeof this[0]) || this[1] && prims.includes(typeof this[1])) {
             return Array.from(new Set(this).union(new Set(array)));
@@ -80,7 +80,7 @@ let arrayMethods = {
             let diffSet = a.toSet().union(b.toSet());
             return Array.from(diffSet).map(x => { var _a; return (_a = a.get(x)) !== null && _a !== void 0 ? _a : b.get(x); });
         }
-    },
+    }
     unique() {
         if (this[0] && prims.includes(typeof this[0]) || this[1] && prims.includes(typeof this[1])) {
             return Array.from(new Set(this));
@@ -89,7 +89,7 @@ let arrayMethods = {
             let a = new ArraySetData(this);
             return Array.from(a.toSet()).map(x => a.get(x));
         }
-    },
-};
-(0, ExtendPrototype_1.extendPrototype)(Array.prototype, arrayMethods);
+    }
+}
+(0, ExtendPrototype_1.extendPrototypeFromClassObj)(Array.prototype, new Extension());
 //# sourceMappingURL=Array.js.map

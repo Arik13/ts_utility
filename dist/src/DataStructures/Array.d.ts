@@ -1,32 +1,21 @@
 export {};
 import "./Set";
 import { Primitive } from "../Types";
-interface ArrayExtension<T> {
-    cross<U>(array: U[]): [T, U][];
-    merge<U>(array: U[]): [T, U][];
-    equals<U>(this: T[], b: U[], pred?: (a: T, b: U) => boolean): boolean;
-    diff<T extends Primitive>(this: T[], array: T[]): T[];
-    symDiff<T extends Primitive>(this: T[], array: T[]): T[];
-    intersect<T extends Primitive>(this: T[], array: T[]): T[];
-    union<T extends Primitive>(this: T[], array: T[]): T[];
-    unique<T extends Primitive>(this: T[]): T[];
-    diff<T extends {
-        id: string | number;
-    }>(this: T[], array: T[]): T[];
-    symDiff<T extends {
-        id: string | number;
-    }>(this: T[], array: T[]): T[];
-    intersect<T extends {
-        id: string | number;
-    }>(this: T[], array: T[]): T[];
-    union<T extends {
-        id: string | number;
-    }>(this: T[], array: T[]): T[];
-    unique<T extends {
-        id: string | number;
-    }>(this: T[]): T[];
+declare type IdObj = {
+    id: string;
+};
+declare type SetType = Primitive | IdObj;
+declare class Extension<T> {
+    cross<U>(this: T[], array: U[]): [T, U][];
+    merge<U>(this: T[], array: U[]): (T | U)[][];
+    equals(this: T[], b: any[], pred?: (a: any, b: any) => boolean): boolean;
+    diff<T extends SetType>(this: T[], array: T[]): IdObj[] | T[];
+    symDiff<T extends SetType>(this: T[], array: T[]): IdObj[] | T[];
+    intersect<T extends SetType>(this: T[], array: T[]): IdObj[] | T[];
+    union<T extends SetType>(this: T[], array: T[]): IdObj[] | T[];
+    unique<T extends SetType>(this: T[]): IdObj[] | T[];
 }
 declare global {
-    interface Array<T> extends ArrayExtension<T> {
+    interface Array<T> extends Extension<T> {
     }
 }

@@ -1,5 +1,5 @@
 export {};
-interface SetExtension {
+declare class Extension {
     isSuperset<T>(this: Set<T>, subset: Set<T>): boolean;
     union<T>(this: Set<T>, setB: Set<T>): Set<T>;
     intersection<T>(this: Set<T>, setB: Set<T>): Set<T>;
@@ -7,6 +7,6 @@ interface SetExtension {
     difference<T>(this: Set<T>, setB: Set<T>): Set<T>;
 }
 declare global {
-    interface Set<T> extends SetExtension {
+    interface Set<T> extends Extension {
     }
 }

@@ -1,20 +1,8 @@
-import { extendPrototype } from "./ExtendPrototype";
+import { extendPrototypeFromClassObj } from "./ExtendPrototype";
 
 export {}
 
-interface SetExtension {
-    isSuperset<T>(this: Set<T>, subset: Set<T>): boolean;
-    union<T>(this: Set<T>, setB: Set<T>): Set<T>;
-    intersection<T>(this: Set<T>, setB: Set<T>): Set<T>;
-    symmetricDifference<T>(this: Set<T>, setB: Set<T>): Set<T>;
-    difference<T>(this: Set<T>, setB: Set<T>): Set<T>;
-}
-
-declare global {
-    interface Set<T> extends SetExtension {}
-}
-
-let methods: SetExtension = {
+class Extension {
     isSuperset<T>(this: Set<T>, subset: Set<T>) {
         for (let elem of subset) {
             if (!this.has(elem)) {
@@ -22,14 +10,14 @@ let methods: SetExtension = {
             }
         }
         return true;
-    },
+    }
     union<T>(this: Set<T>, setB: Set<T>) {
         let union = new Set(this);
         for (let elem of setB) {
             union.add(elem);
         }
         return union;
-    },
+    }
     intersection<T>(this: Set<T>, setB: Set<T>) {
         let intersection = new Set<T>();
         for (let elem of setB) {
@@ -38,7 +26,7 @@ let methods: SetExtension = {
             }
         }
         return intersection;
-    },
+    }
     symmetricDifference<T>(this: Set<T>, setB: Set<T>) {
         let difference = new Set(this);
         for (let elem of setB) {
@@ -49,7 +37,7 @@ let methods: SetExtension = {
             }
         }
         return difference;
-    },
+    }
     difference<T>(this: Set<T>, setB: Set<T>) {
         let difference = new Set(this);
         for (let elem of setB) {
@@ -57,5 +45,10 @@ let methods: SetExtension = {
         }
         return difference;
     }
+};
+
+declare global {
+    interface Set<T> extends Extension {}
 }
-extendPrototype(Set.prototype, methods);
+
+extendPrototypeFromClassObj(Set.prototype, new Extension());

@@ -1,0 +1,1 @@
+{"version":3,"file":"Function.js","sourceRoot":"","sources":["../../../src/DataStructures/Function.ts"],"names":[],"mappings":";;AACA,iBAAe;AAEf,uDAAoD;AACpD,IAAI,KAAK,GAAG,CAAC,QAAQ,EAAE,QAAQ,EAAE,SAAS,CAAC,CAAC;AAE5C,IAAI,eAAe,GAAG;IAClB,IAAI,CAAC;QACD,OAAO,SAAS,CAAC;IACrB,CAAC;CACJ,CAAA;AAQD,IAAA,iCAAe,EAAC,QAAQ,CAAC,SAAS,EAAE,eAAe,CAAC,CAAC"}
