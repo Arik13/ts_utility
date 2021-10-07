@@ -72,8 +72,8 @@ export class DirectoryMap {
         (function inner(dir: Directory, dirMap: DirectoryMap) {
             pathStack.push(dir.name);
             dirMap.idMap.set(dir.id, dir);
-            let path = pathStack.join("/");
-            dir.path = `${path}${dir.ext ?? ""}`;
+            let path = `${pathStack.join("/")}${dir.ext ?? ""}`;
+            dir.path = path;
             dirMap.pathMap.set(path, dir);
             dir.children.forEach(subDir => inner(subDir, dirMap));
             pathStack.pop();
