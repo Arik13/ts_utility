@@ -91,10 +91,11 @@ class DirectoryMap {
         return this.root;
     }
     set(dir) {
+        var _a;
         let parent = this.get(dir.parentID);
         parent.children.push(dir);
         this.idMap.set(dir.id, dir);
-        dir.path = `${parent.path}/${dir.name}${dir.ext}`;
+        dir.path = `${parent.path}/${dir.name}${(_a = dir.ext) !== null && _a !== void 0 ? _a : ""}`;
         this.pathMap.set(dir.path, dir);
         return dir;
     }

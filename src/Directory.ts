@@ -97,7 +97,7 @@ export class DirectoryMap {
         let parent = this.get(dir.parentID);
         parent.children.push(dir);
         this.idMap.set(dir.id, dir);
-        dir.path = `${parent.path}/${dir.name}${dir.ext}`;
+        dir.path = `${parent.path}/${dir.name}${dir.ext ?? ""}`;
         this.pathMap.set(dir.path, dir);
         return dir;
     }
