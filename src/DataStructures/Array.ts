@@ -40,7 +40,7 @@ class Extension<T> {
         }
         return true;
     }
-    delete(this: T[], pred: (value: T, index: number, array: T[]) => void): T {
+    remove(this: T[], pred: (value: T, index: number, array: T[]) => void): T {
         let index = this.findIndex(pred);
         let item = this[index];
         this.splice(index, 1);
