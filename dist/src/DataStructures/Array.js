@@ -36,6 +36,12 @@ class Extension {
         }
         return true;
     }
+    remove(pred) {
+        let index = this.findIndex(pred);
+        let item = this[index];
+        this.splice(index, 1);
+        return item;
+    }
     // SET OPERATIONS
     diff(array) {
         if (this[0] && prims.includes(typeof this[0]) || this[1] && prims.includes(typeof this[1])) {
