@@ -274,9 +274,11 @@ export interface ErrMemento {
 export class Err {
     private static readonly HEADER_COLOR = BRIGHT_WHITE;
     private static readonly TRACE_COLOR = BRIGHT_RED;
-    private static readonly SCRIPT_TRACE_COLOR = BRIGHT_CYAN;
+    // private static readonly SCRIPT_TRACE_COLOR = BRIGHT_CYAN;
+    private static readonly SCRIPT_TRACE_COLOR = BRIGHT_RED;
     private static readonly CALL_COLOR = BRIGHT_BLACK;
-    private static readonly MESSAGE_COLOR = YELLOW;
+    // private static readonly MESSAGE_COLOR = YELLOW;
+    private static readonly MESSAGE_COLOR = RED;
 
     protected errname: string;
     protected messages: string[];

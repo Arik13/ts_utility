@@ -366,7 +366,9 @@ class Err {
 exports.Err = Err;
 Err.HEADER_COLOR = BRIGHT_WHITE;
 Err.TRACE_COLOR = BRIGHT_RED;
-Err.SCRIPT_TRACE_COLOR = BRIGHT_CYAN;
+// private static readonly SCRIPT_TRACE_COLOR = BRIGHT_CYAN;
+Err.SCRIPT_TRACE_COLOR = BRIGHT_RED;
 Err.CALL_COLOR = BRIGHT_BLACK;
-Err.MESSAGE_COLOR = YELLOW;
+// private static readonly MESSAGE_COLOR = YELLOW;
+Err.MESSAGE_COLOR = RED;
 //# sourceMappingURL=Err.js.map
