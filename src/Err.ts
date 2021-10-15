@@ -457,8 +457,9 @@ export class Err {
         this.scriptTraceString = this.formatTrace(this.scriptTrace, "SCRIPT TRACE", Err.HEADER_COLOR, Err.SCRIPT_TRACE_COLOR, Err.CALL_COLOR);
     }
     private updateOutput() {
-        this.stack = `${Err.line()}\n${this.traceString}\n${this.scriptTraceString}`
-        this.message = `${this.messageString}\n${Err.line()}`;
+        // this.stack = `${Err.line()}\n${this.traceString}\n${this.scriptTraceString}`
+        this.stack = `${this.traceString}\n${this.scriptTraceString}`;
+        this.message = `${this.messageString}\n`;
     }
     private static line() {
         return "______________________________________________________________\n";
