@@ -144,7 +144,7 @@ export class DebugData {
     }
 }
 
-interface ParsedPath {
+export interface ParsedPath {
     root: string;
     dir: string;
     base: string;
@@ -152,7 +152,7 @@ interface ParsedPath {
     name: string;
 }
 
-interface TraceLineMemento {
+export interface TraceLineMemento {
     dir: string;
     base: string;
     name: string;
@@ -164,7 +164,7 @@ interface TraceLineMemento {
     dirID: string;
 }
 
-class TraceLine implements ParsedPath {
+export class TraceLine implements ParsedPath {
     root: string;
     dir: string;
     base: string;
@@ -260,7 +260,7 @@ class TraceLine implements ParsedPath {
         this.name = data.name? data.name : "<anonymous>";
     }
 }
-interface ErrMemento {
+export interface ErrMemento {
     name: string;
     messages: string[];
     // messageString: string;

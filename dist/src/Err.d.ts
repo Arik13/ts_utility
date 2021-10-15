@@ -24,14 +24,14 @@ export declare class DebugData {
     dirID: string;
     constructor(line: number, col: number);
 }
-interface ParsedPath {
+export interface ParsedPath {
     root: string;
     dir: string;
     base: string;
     ext: string;
     name: string;
 }
-interface TraceLineMemento {
+export interface TraceLineMemento {
     dir: string;
     base: string;
     name: string;
@@ -42,7 +42,7 @@ interface TraceLineMemento {
     col: number;
     dirID: string;
 }
-declare class TraceLine implements ParsedPath {
+export declare class TraceLine implements ParsedPath {
     root: string;
     dir: string;
     base: string;
@@ -71,7 +71,7 @@ declare class TraceLine implements ParsedPath {
     deserialize(memento: TraceLineMemento): this & TraceLineMemento;
     private initPathData;
 }
-interface ErrMemento {
+export interface ErrMemento {
     name: string;
     messages: string[];
     trace: TraceLineMemento[];

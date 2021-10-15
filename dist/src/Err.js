@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Err = exports.DebugData = exports.construct = void 0;
+exports.Err = exports.TraceLine = exports.DebugData = exports.construct = void 0;
 const Path = require("path");
 const sourceMapSupport = require("source-map-support");
 let construct = (obj, constructors, args, preHook, postHook) => {
@@ -188,6 +188,7 @@ class TraceLine {
         this.name = data.name ? data.name : "<anonymous>";
     }
 }
+exports.TraceLine = TraceLine;
 class Err {
     constructor(error, message, debug) {
         let createProperty = (value) => ({ enumerable: false, configurable: true, writable: true, value });
