@@ -416,6 +416,9 @@ export class Err {
         error.stack = this.stack;
         return error;
     }
+    toString() {
+        return `${this.stack}${this.name}${this.message}`;
+    }
     private updateMessage() {
         this.genMessageString();
         this.updateOutput();

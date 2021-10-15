@@ -109,6 +109,7 @@ export declare class Err {
     serialize(): ErrMemento;
     deserialize(memento: ErrMemento): this;
     toStdError(): Error;
+    toString(): string;
     private updateMessage;
     private updateTrace;
     private updateScriptTrace;
