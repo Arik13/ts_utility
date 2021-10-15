@@ -161,7 +161,7 @@ class TraceLine {
         this.initPathData(pathData);
     }
     pathString() {
-        let root = this.root === undefined ? "" : `${this.root}/`;
+        let root = this.root === undefined ? "" : `${this.root}`;
         let dir = this.dir === undefined ? "" : `${this.dir}/`;
         let docPos = this.line ? `:${this.line}:${this.col}` : "";
         let ext = this.ext === undefined ? "" : this.ext;
