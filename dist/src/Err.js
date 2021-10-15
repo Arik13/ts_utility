@@ -306,6 +306,12 @@ class Err {
         this.updateOutput();
         return this;
     }
+    static toString(memento, root) {
+        return new Err()
+            .deserialize(memento)
+            .forEachTraceLine(l => l.root = root)
+            .toString();
+    }
     toStdError() {
         let error = new Error();
         error.name = this.name;

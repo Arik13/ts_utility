@@ -108,6 +108,7 @@ export declare class Err {
     forEachTraceLine(handler: (l: TraceLine) => void): this;
     serialize(): ErrMemento;
     deserialize(memento: ErrMemento): this;
+    static toString(memento: ErrMemento, root: string): string;
     toStdError(): Error;
     toString(): string;
     private updateMessage;
