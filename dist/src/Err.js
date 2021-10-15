@@ -161,10 +161,11 @@ class TraceLine {
         this.initPathData(pathData);
     }
     pathString() {
+        let root = this.root === undefined ? "" : `${this.root}/`;
         let dir = this.dir === undefined ? "" : `${this.dir}/`;
         let docPos = this.line ? `:${this.line}:${this.col}` : "";
         let ext = this.ext === undefined ? "" : this.ext;
-        return `${dir}${this.name}${ext}${docPos}`;
+        return `${root}${dir}${this.name}${ext}${docPos}`;
     }
     format() {
         var _a;
@@ -328,6 +329,8 @@ class Err {
         this.messageString = `\n${Err.MESSAGE_COLOR}${this.messages.map(m => `    ${m}`).join("\n")}${RESET}`;
     }
     formatTrace(trace, headerStr, headerClr, pathClr, callClr) {
+        if (!trace.length)
+            return "";
         let toTraceString = (line) => {
             let { call, path, suffix } = line.format();
             return `    ${callClr}${call}${RESET}${pathClr}${path}${RESET}${callClr}${suffix}${RESET}\n`;
