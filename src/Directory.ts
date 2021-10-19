@@ -69,6 +69,9 @@ export class DirectoryMap {
     }
     private initPaths(dir: Directory) {
         let pathStack: string[] = [];
+        if (dir.parentID) {
+            pathStack.push(this.get(dir.parentID).path);
+        }
         (function inner(dir: Directory, dirMap: DirectoryMap) {
             pathStack.push(dir.name);
             dirMap.idMap.set(dir.id, dir);

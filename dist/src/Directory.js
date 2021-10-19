@@ -64,6 +64,9 @@ class DirectoryMap {
     }
     initPaths(dir) {
         let pathStack = [];
+        if (dir.parentID) {
+            pathStack.push(this.get(dir.parentID).path);
+        }
         (function inner(dir, dirMap) {
             var _a;
             pathStack.push(dir.name);
