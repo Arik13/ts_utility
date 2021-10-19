@@ -14,7 +14,7 @@ class DirectoryMap {
         this.idMap.clear();
         this.pathMap.clear();
         this.setRoot(root);
-        this.initPaths();
+        this.initPaths(this.root);
         return this;
     }
     move(moveID, targetID) {
@@ -62,7 +62,7 @@ class DirectoryMap {
         this.visitAssets(dir => assets.push(dir), rootID);
         return assets.map(dir => cb(dir, this));
     }
-    initPaths() {
+    initPaths(dir) {
         let pathStack = [];
         (function inner(dir, dirMap) {
             var _a;
@@ -73,7 +73,7 @@ class DirectoryMap {
             dirMap.pathMap.set(path, dir);
             dir.children.forEach(subDir => inner(subDir, dirMap));
             pathStack.pop();
-        })(this.root, this);
+        })(dir, this);
     }
     add(dir) {
         return this.has(dir.id) ? null : this.set(dir);
@@ -152,7 +152,9 @@ class DirectoryMap {
         });
     }
     rename(id, name) {
-        this.get(id).name = name;
+        let dir = this.get(id);
+        dir.name = name;
+        this.initPaths(dir);
     }
 }
 exports.DirectoryMap = DirectoryMap;
