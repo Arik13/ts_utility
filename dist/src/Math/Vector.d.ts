@@ -8,4 +8,5 @@ export declare class Vector {
     scalarMult(scalar: number): Vector;
     scalarSum(): number;
     cross(v: Vector): Vector;
+    normalize(): Vector;
 }

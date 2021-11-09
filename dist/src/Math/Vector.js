@@ -34,6 +34,10 @@ class Vector {
             this.scs[0] * v.scs[1] - this.scs[1] * v.scs[0],
         ]);
     }
+    normalize() {
+        let mag = this.magnitude();
+        return new Vector(this.scs.map(x => x / mag));
+    }
 }
 exports.Vector = Vector;
 //# sourceMappingURL=Vector.js.map
