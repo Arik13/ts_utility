@@ -48,7 +48,7 @@ class Extension<T> {
     }
 
     // SET OPERATIONS
-    diff<T extends SetType>(this: T[], array: T[]) {
+    diff<T extends SetType>(this: T[], array: T[]): T[] | IdObj[] {
         if (this[0] && prims.includes(typeof this[0]) || this[1] && prims.includes(typeof this[1])) {
             return Array.from(new Set(this).difference(new Set(array)));
         }
