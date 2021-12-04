@@ -26,7 +26,10 @@ export function deepEqual(object1: any, object2: any) {
 export function deepCopy(obj1: any, obj2: any) {
     for (let key in obj2) {
         let el = obj2[key];
-        if (Array.isArray(el)) {
+        if (el === null || el === undefined) {
+            obj1[key] = el;
+        }
+        else if (Array.isArray(el)) {
             el.map(item => JSON.parse(JSON.stringify(item)));
         }
         else if (typeof(el) == "object") {
