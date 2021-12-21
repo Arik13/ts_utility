@@ -6,7 +6,7 @@ export class AutoSyncQueue {
             this.dequeue();
         }
     }
-    async dequeue() {
+    dequeue() {
         if (!this.queue.length) return;
         (async () => {
             await this.queue[0]();

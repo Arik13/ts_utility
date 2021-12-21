@@ -21,15 +21,13 @@ class AutoSyncQueue {
         }
     }
     dequeue() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!this.queue.length)
-                return;
-            (() => __awaiter(this, void 0, void 0, function* () {
-                yield this.queue[0]();
-                this.queue.shift();
-                this.dequeue();
-            }))();
-        });
+        if (!this.queue.length)
+            return;
+        (() => __awaiter(this, void 0, void 0, function* () {
+            yield this.queue[0]();
+            this.queue.shift();
+            this.dequeue();
+        }))();
     }
 }
 exports.AutoSyncQueue = AutoSyncQueue;

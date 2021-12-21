@@ -97,6 +97,17 @@ class DirectoryMap {
         var _a;
         let parent = this.get(dir.parentID);
         parent.children.push(dir);
+        parent.children.sort((a, b) => {
+            if (a.itemID && !b.itemID)
+                return 1;
+            else if (b.itemID && !a.itemID)
+                return -1;
+            else if (a.name < b.name)
+                return -1;
+            else if (a.name > b.name)
+                return 1;
+            return 0;
+        });
         this.idMap.set(dir.id, dir);
         dir.path = `${parent.path}/${dir.name}${(_a = dir.ext) !== null && _a !== void 0 ? _a : ""}`;
         this.pathMap.set(dir.path, dir);
