@@ -48,8 +48,8 @@ export declare class DirectoryMap {
     }, ext: string, parentID: string): Directory;
     createDir(name: string, parentID: string): Directory;
     rename(id: string, name: string): void;
-    setPermission(dirID: string, permission: keyof Permissions, level: PERMISSION_LEVEL): void;
-    setPermissionsOnTree(dirID: string, permission: keyof Permissions, level: PERMISSION_LEVEL): void;
+    setPermissionLevel(dirID: string, permission: keyof Permissions, level: PERMISSION_LEVEL): void;
+    setPermissionLevelOnTree(dirID: string, permission: keyof Permissions, level: PERMISSION_LEVEL): void;
     addPermissionException(dirID: string, permission: keyof Permissions, exceptionID: string): void;
     addPermissionExceptionOnTree(dirID: string, permission: keyof Permissions, exceptionID: PERMISSION_LEVEL): void;
     removePermissionException(dirID: string, permission: keyof Permissions, exceptionID: string): void;

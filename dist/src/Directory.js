@@ -191,10 +191,10 @@ class DirectoryMap {
     // setTreeVisiblityLevel(dirID: string, level: PERMISSION_LEVEL) {
     //     this.setPermissionsOnTree(dirID, "visible", level);
     // }
-    setPermission(dirID, permission, level) {
+    setPermissionLevel(dirID, permission, level) {
         this.get(dirID).permissions[permission].level = level;
     }
-    setPermissionsOnTree(dirID, permission, level) {
+    setPermissionLevelOnTree(dirID, permission, level) {
         this.traverse(dir => dir.permissions[permission].level = level, dirID);
     }
     addPermissionException(dirID, permission, exceptionID) {
