@@ -2,12 +2,12 @@ import * as mong from "mongoose";
 
 export const genID = () => new mong.Types.ObjectId().toString();
 
-export enum PERMISSION_LEVEL {
-    GM = "GM",
-    PLAYER = "PLAYER",
-}
+// export enum PERMISSION_LEVEL {
+//     GM,
+//     PLAYER,
+// }
 export interface Permission {
-    level: PERMISSION_LEVEL;
+    level: number;
     exceptions: string[];
 }
 export interface Permissions {
@@ -29,7 +29,7 @@ export interface Directory {
 
 let defaultPermissions = (): Permissions => ({
     visible: {
-        level: PERMISSION_LEVEL.PLAYER,
+        level: 0,
         exceptions: [],
     }
 })
@@ -196,17 +196,17 @@ export class DirectoryMap {
     //     this.setPermissionsOnTree(dirID, "visible", level);
     // }
 
-    setPermissionLevel(dirID: string, permission: keyof Permissions, level: PERMISSION_LEVEL) {
+    setPermissionLevel(dirID: string, permission: keyof Permissions, level: number) {
         this.get(dirID).permissions[permission].level = level;
     }
-    setPermissionLevelOnTree(dirID: string, permission: keyof Permissions, level: PERMISSION_LEVEL) {
+    setPermissionLevelOnTree(dirID: string, permission: keyof Permissions, level: number) {
         this.traverse(dir => dir.permissions[permission].level = level, dirID);
     }
 
     addPermissionException(dirID: string, permission: keyof Permissions, exceptionID: string) {
         this.get(dirID).permissions[permission].exceptions.push(exceptionID);
     }
-    addPermissionExceptionOnTree(dirID: string, permission: keyof Permissions, exceptionID: PERMISSION_LEVEL) {
+    addPermissionExceptionOnTree(dirID: string, permission: keyof Permissions, exceptionID: string) {
         this.traverse(dir => dir.permissions[permission].exceptions.push(exceptionID), dirID);
     }
     removePermissionException(dirID: string, permission: keyof Permissions, exceptionID: string) {

@@ -1,17 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DirectoryMap = exports.PERMISSION_LEVEL = exports.genID = void 0;
+exports.DirectoryMap = exports.genID = void 0;
 const mong = require("mongoose");
 const genID = () => new mong.Types.ObjectId().toString();
 exports.genID = genID;
-var PERMISSION_LEVEL;
-(function (PERMISSION_LEVEL) {
-    PERMISSION_LEVEL["GM"] = "GM";
-    PERMISSION_LEVEL["PLAYER"] = "PLAYER";
-})(PERMISSION_LEVEL = exports.PERMISSION_LEVEL || (exports.PERMISSION_LEVEL = {}));
 let defaultPermissions = () => ({
     visible: {
-        level: PERMISSION_LEVEL.PLAYER,
+        level: 0,
         exceptions: [],
     }
 });
