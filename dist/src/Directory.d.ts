@@ -1,4 +1,15 @@
 export declare const genID: () => string;
+export declare enum PERMISSION_LEVEL {
+    GM = "GM",
+    PLAYER = "PLAYER"
+}
+export interface Permission {
+    level: PERMISSION_LEVEL;
+    exceptions: string[];
+}
+export interface Permissions {
+    visible: Permission;
+}
 export interface Directory {
     id?: string;
     name: string;
@@ -9,6 +20,7 @@ export interface Directory {
     path?: string;
     base?: string;
     ext?: string;
+    permissions: Permissions;
 }
 export declare class DirectoryMap {
     root: Directory;
@@ -36,4 +48,10 @@ export declare class DirectoryMap {
     }, ext: string, parentID: string): Directory;
     createDir(name: string, parentID: string): Directory;
     rename(id: string, name: string): void;
+    setPermission(dirID: string, permission: keyof Permissions, level: PERMISSION_LEVEL): void;
+    setPermissionsOnTree(dirID: string, permission: keyof Permissions, level: PERMISSION_LEVEL): void;
+    addPermissionException(dirID: string, permission: keyof Permissions, exceptionID: string): void;
+    addPermissionExceptionOnTree(dirID: string, permission: keyof Permissions, exceptionID: PERMISSION_LEVEL): void;
+    removePermissionException(dirID: string, permission: keyof Permissions, exceptionID: string): void;
+    removePermissionExceptionOnTree(dirID: string, permission: keyof Permissions, exceptionID: string): void;
 }

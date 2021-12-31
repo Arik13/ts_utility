@@ -2,6 +2,18 @@ import * as mong from "mongoose";
 
 export const genID = () => new mong.Types.ObjectId().toString();
 
+export enum PERMISSION_LEVEL {
+    GM = "GM",
+    PLAYER = "PLAYER",
+}
+export interface Permission {
+    level: PERMISSION_LEVEL;
+    exceptions: string[];
+}
+export interface Permissions {
+    visible: Permission;
+}
+
 export interface Directory {
     id?: string;
     name: string;
@@ -12,7 +24,15 @@ export interface Directory {
     path?: string;
     base?: string;
     ext?: string;
+    permissions: Permissions;
 }
+
+let defaultPermissions = (): Permissions => ({
+    visible: {
+        level: PERMISSION_LEVEL.PLAYER,
+        exceptions: [],
+    }
+})
 
 export class DirectoryMap {
     root: Directory;
@@ -53,9 +73,9 @@ export class DirectoryMap {
         return this.isAncestor(superNode, this.get(subNode.parentID));
     }
     traverse(visit: (dir: Directory, dirMap?: DirectoryMap) => void, rootID?: string) {
-        (function inner(dir: Directory, dirMap: DirectoryMap) {
+        (function recurse(dir: Directory, dirMap: DirectoryMap) {
             visit(dir, dirMap);
-            dir.children.forEach(subDir => inner(subDir, dirMap));
+            dir.children.forEach(subDir => recurse(subDir, dirMap));
         })(this.get(rootID) ?? this.root, this);
     }
     visitAssets(visit: (dir: Directory, dirMap?: DirectoryMap) => void, rootID?: string) {
@@ -72,13 +92,13 @@ export class DirectoryMap {
         if (dir.parentID) {
             pathStack.push(this.get(dir.parentID).path);
         }
-        (function inner(dir: Directory, dirMap: DirectoryMap) {
+        (function recurse(dir: Directory, dirMap: DirectoryMap) {
             pathStack.push(dir.name);
             dirMap.idMap.set(dir.id, dir);
             let path = `${pathStack.join("/")}${dir.ext ?? ""}`;
             dir.path = path;
             dirMap.pathMap.set(path, dir);
-            dir.children.forEach(subDir => inner(subDir, dirMap));
+            dir.children.forEach(subDir => recurse(subDir, dirMap));
             pathStack.pop();
         })(dir, this);
     }
@@ -92,6 +112,7 @@ export class DirectoryMap {
             children: dir?.children ?? [],
             parentID: null,
             itemID: null,
+            permissions: defaultPermissions(),
         };
         this.idMap.set(this.root.id, this.root);
         return this.root;
@@ -148,6 +169,7 @@ export class DirectoryMap {
             parentID,
             itemID: asset.id,
             ext,
+            permissions: defaultPermissions(),
         });
     }
     createDir(name: string, parentID: string) {
@@ -157,11 +179,40 @@ export class DirectoryMap {
             children: [],
             parentID,
             itemID: null,
+            permissions: defaultPermissions(),
         });
     }
     rename(id: string, name: string) {
         let dir = this.get(id)
         dir.name = name;
         this.initPaths(dir);
+    }
+
+    // // PERMISSIONS
+    // setVisiblityLevel(dirID: string, level: PERMISSION_LEVEL) {
+    //     this.setPermission(dirID, "visible", level);
+    // }
+    // setTreeVisiblityLevel(dirID: string, level: PERMISSION_LEVEL) {
+    //     this.setPermissionsOnTree(dirID, "visible", level);
+    // }
+
+    setPermission(dirID: string, permission: keyof Permissions, level: PERMISSION_LEVEL) {
+        this.get(dirID).permissions[permission].level = level;
+    }
+    setPermissionsOnTree(dirID: string, permission: keyof Permissions, level: PERMISSION_LEVEL) {
+        this.traverse(dir => dir.permissions[permission].level = level, dirID);
+    }
+
+    addPermissionException(dirID: string, permission: keyof Permissions, exceptionID: string) {
+        this.get(dirID).permissions[permission].exceptions.push(exceptionID);
+    }
+    addPermissionExceptionOnTree(dirID: string, permission: keyof Permissions, exceptionID: PERMISSION_LEVEL) {
+        this.traverse(dir => dir.permissions[permission].exceptions.push(exceptionID), dirID);
+    }
+    removePermissionException(dirID: string, permission: keyof Permissions, exceptionID: string) {
+        this.get(dirID).permissions[permission].exceptions.remove(x => x === exceptionID);
+    }
+    removePermissionExceptionOnTree(dirID: string, permission: keyof Permissions, exceptionID: string) {
+        this.traverse(dir => dir.permissions[permission].exceptions.remove(x => x === exceptionID), dirID);
     }
 }
