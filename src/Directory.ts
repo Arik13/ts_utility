@@ -68,7 +68,8 @@ export class DirectoryMap {
         return true;
     }
     isAncestor(superNode: Directory, subNode: Directory): boolean {
-        if (!subNode || superNode.id == subNode.id) return true;
+        if (!superNode || ! subNode) return false;
+        if (superNode.id == subNode.id) return true;
         if (!subNode.parentID) return false;
         return this.isAncestor(superNode, this.get(subNode.parentID));
     }
