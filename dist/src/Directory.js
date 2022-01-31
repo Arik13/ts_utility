@@ -41,6 +41,8 @@ class DirectoryMap {
         moveParent.children.splice(dragIndex, 1);
         target.children.splice(insertionIndex, 0, move);
         move.parentID = target.id;
+        this.sort(moveParent.id);
+        this.sort(target.id);
         return true;
     }
     isAncestor(superNode, subNode) {
@@ -106,7 +108,15 @@ class DirectoryMap {
         var _a;
         let parent = this.get(dir.parentID);
         parent.children.push(dir);
-        parent.children.sort((a, b) => {
+        this.sort(parent.id);
+        this.idMap.set(dir.id, dir);
+        dir.path = `${parent.path}/${dir.name}${(_a = dir.ext) !== null && _a !== void 0 ? _a : ""}`;
+        this.pathMap.set(dir.path, dir);
+        return dir;
+    }
+    sort(id = null) {
+        let dir = id ? this.get(id) : this.root;
+        dir.children.sort((a, b) => {
             if (a.itemID && !b.itemID)
                 return 1;
             else if (b.itemID && !a.itemID)
@@ -117,10 +127,6 @@ class DirectoryMap {
                 return 1;
             return 0;
         });
-        this.idMap.set(dir.id, dir);
-        dir.path = `${parent.path}/${dir.name}${(_a = dir.ext) !== null && _a !== void 0 ? _a : ""}`;
-        this.pathMap.set(dir.path, dir);
-        return dir;
     }
     get(idOrPath) {
         var _a;

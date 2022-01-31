@@ -33,6 +33,7 @@ export declare class DirectoryMap {
     add(dir: Directory): Directory;
     private setRoot;
     set(dir: Directory): Directory;
+    sort(id?: string): void;
     get(idOrPath: string): Directory;
     has(idOrPath: string): boolean;
     map<T>(cb: (dir: Directory) => T, idOrPath?: string): T[];
