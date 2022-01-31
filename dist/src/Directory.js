@@ -44,7 +44,7 @@ class DirectoryMap {
         return true;
     }
     isAncestor(superNode, subNode) {
-        if (superNode.id == subNode.id)
+        if (!subNode || superNode.id == subNode.id)
             return true;
         if (!subNode.parentID)
             return false;
