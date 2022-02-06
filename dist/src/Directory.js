@@ -1,9 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DirectoryMap = exports.genID = void 0;
+exports.DirectoryMap = exports.ASSET_NAME = exports.genID = void 0;
 const mong = require("mongoose");
 const genID = () => new mong.Types.ObjectId().toString();
 exports.genID = genID;
+var ASSET_NAME;
+(function (ASSET_NAME) {
+    ASSET_NAME[ASSET_NAME["FALSEY"] = 0] = "FALSEY";
+    ASSET_NAME[ASSET_NAME["DIRECTORY"] = 1] = "DIRECTORY";
+    ASSET_NAME[ASSET_NAME["IMAGE"] = 2] = "IMAGE";
+    ASSET_NAME[ASSET_NAME["COMPONENT_DEFINITION"] = 3] = "COMPONENT_DEFINITION";
+    ASSET_NAME[ASSET_NAME["SCRIPT"] = 4] = "SCRIPT";
+    ASSET_NAME[ASSET_NAME["LOCATION"] = 5] = "LOCATION";
+    ASSET_NAME[ASSET_NAME["TOKEN"] = 6] = "TOKEN";
+    ASSET_NAME[ASSET_NAME["STATE_OBJECT"] = 7] = "STATE_OBJECT";
+    ASSET_NAME[ASSET_NAME["STATE_OBJECT_TEMPLATE"] = 8] = "STATE_OBJECT_TEMPLATE";
+})(ASSET_NAME = exports.ASSET_NAME || (exports.ASSET_NAME = {}));
 let defaultPermissions = () => ({
     visible: {
         level: 0,
@@ -100,6 +112,7 @@ class DirectoryMap {
             parentID: null,
             itemID: null,
             permissions: defaultPermissions(),
+            type: ASSET_NAME.DIRECTORY,
         };
         this.idMap.set(this.root.id, this.root);
         return this.root;
@@ -160,7 +173,7 @@ class DirectoryMap {
         this.idMap.delete(dir.id);
         this.pathMap.delete(dir.path);
     }
-    createAssetDir(asset, ext, parentID) {
+    createAssetDir(asset, ext, parentID, type) {
         asset.dirID = (0, exports.genID)();
         return this.set({
             id: asset.dirID,
@@ -170,6 +183,7 @@ class DirectoryMap {
             itemID: asset.id,
             ext,
             permissions: defaultPermissions(),
+            type,
         });
     }
     createDir(name, parentID) {
@@ -180,6 +194,7 @@ class DirectoryMap {
             parentID,
             itemID: null,
             permissions: defaultPermissions(),
+            type: ASSET_NAME.DIRECTORY,
         });
     }
     rename(id, name) {
