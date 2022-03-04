@@ -17,7 +17,8 @@ let pathTraverser = (arg, visitor) => {
         };
         let result = visitor(newArg);
         if (result === "end") {
-            return arg.path.pop();
+            arg.path.pop();
+            return arg.val;
         }
         pathTraverser(newArg, visitor);
         arg.path.pop();
