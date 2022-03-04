@@ -10,6 +10,14 @@ interface Arg<T = any> {
 declare type Predicate = (x: Arg) => boolean;
 declare type AnyMap = (arg: Arg) => any;
 declare type KeyMap = (arg: Arg) => Key;
+declare type PathArg = {
+    path: Key[];
+    key: Key;
+    val: any;
+    parent: any;
+    root: any;
+};
+declare type PathVisitor = (arg: PathArg) => any;
 interface Options {
     t?: Types;
     k?: Key;
@@ -21,6 +29,7 @@ export declare class JSONMonad extends Monad<any> {
     constructor(json: any);
     map(map: AnyMap): JSONMonad;
     traverse(visitor: AnyMap): JSONMonad;
+    traversePaths(visitor: PathVisitor): JSONMonad;
     visit(predicate: (arg: Arg) => boolean, visitor: AnyMap): JSONMonad;
     visitKeys(key: Key, visitor: (arg: Arg) => void): JSONMonad;
     visitOpts(opts: Options, visitor: (arg: Arg) => void): JSONMonad;

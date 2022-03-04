@@ -3,6 +3,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.JSONMonad = void 0;
 // import * as fs from "fs";
 const Monads_1 = require("./Monads");
+let pathTraverser = (arg, visitor) => {
+    if (!arg.val || typeof arg.val != "object")
+        return arg.val;
+    for (let key in arg.val) {
+        arg.path.push(key);
+        let newArg = {
+            path: arg.path,
+            key,
+            parent: arg.val,
+            val: arg.val[key],
+            root: arg.root,
+        };
+        visitor(newArg);
+        pathTraverser(newArg, visitor);
+        arg.path.pop();
+    }
+    return arg.val;
+};
 let traverser = (val, key, parent, visitor) => {
     visitor({ val, key, parent });
     if (typeof val == "object") {
@@ -58,6 +76,9 @@ class JSONMonad extends Monads_1.Monad {
     }
     traverse(visitor) {
         return JSONMonad.new(traverser(this.clone(), null, null, visitor));
+    }
+    traversePaths(visitor) {
+        return JSONMonad.new(pathTraverser({ root: this.clone(), val: this.clone(), path: [], key: null, parent: null }, visitor));
     }
     visit(predicate, visitor) {
         return this.traverse(x => predicate(x) ? visitor(x) : 0);

@@ -8,6 +8,8 @@ interface Arg<T = any> {key: Key, val: T, parent: any}
 type Predicate = (x: Arg) => boolean;
 type AnyMap = (arg: Arg) => any;
 type KeyMap = (arg: Arg) => Key;
+type PathArg = {path: Key[], key: Key, val: any, parent: any, root: any};
+type PathVisitor = (arg: PathArg) => any;
 interface Options {
     t?: Types,
     k?: Key,
@@ -15,6 +17,24 @@ interface Options {
     a?: boolean,    // include array
 }
 
+let pathTraverser = (arg: PathArg, visitor: PathVisitor) => {
+    if (!arg.val || typeof arg.val != "object") return arg.val;
+
+    for (let key in arg.val) {
+        arg.path.push(key);
+        let newArg = {
+            path: arg.path,
+            key,
+            parent: arg.val,
+            val: arg.val[key],
+            root: arg.root,
+        };
+        visitor(newArg);
+        pathTraverser(newArg, visitor);
+        arg.path.pop();
+    }
+    return arg.val;
+}
 let traverser = (val: any, key: Key, parent: any, visitor: AnyMap) => {
     visitor({val, key, parent});
     if (typeof val == "object") {
@@ -74,6 +94,9 @@ export class JSONMonad extends Monad<any> {
     }
     traverse(visitor: AnyMap) {
         return JSONMonad.new(traverser(this.clone(), null, null, visitor));
+    }
+    traversePaths(visitor: PathVisitor) {
+        return JSONMonad.new(pathTraverser({root: this.clone(), val: this.clone(), path: [], key: null, parent: null}, visitor));
     }
     visit(predicate: (arg: Arg) => boolean, visitor: AnyMap) {
         return this.traverse(x => predicate(x)? visitor(x): 0);
