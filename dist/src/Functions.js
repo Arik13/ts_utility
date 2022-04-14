@@ -1,6 +1,15 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.calcSetDifference = exports.uniqueCompare = exports.unique = exports.generatePassword = exports.tablesEqual = exports.arraysEqual = exports.merge = exports.diffsToAccumulatingSums = exports.accumulatedSumsToDiffs = exports.convertColumnsToRows = exports.calcPercDistribution = exports.generateOrdinalNumerals = exports.toOrdinalNumeral = exports.reduceMax = exports.groupByIndexSorter = exports.wordFinder = exports.containerWordFinder = exports.isNumeric = exports.pipe = exports.compose = exports.deeplogN = exports.deeplog = void 0;
+exports.time_a = exports.time_s = exports.calcSetDifference = exports.uniqueCompare = exports.unique = exports.generatePassword = exports.tablesEqual = exports.arraysEqual = exports.merge = exports.diffsToAccumulatingSums = exports.accumulatedSumsToDiffs = exports.convertColumnsToRows = exports.calcPercDistribution = exports.generateOrdinalNumerals = exports.toOrdinalNumeral = exports.reduceMax = exports.groupByIndexSorter = exports.wordFinder = exports.containerWordFinder = exports.isNumeric = exports.pipe = exports.compose = exports.deeplogN = exports.deeplog = void 0;
 const util = require("util");
 function deeplog(...args) {
     console.info(util.formatWithOptions({ colors: true, depth: 100 }, "%O", ...args));
@@ -144,4 +153,16 @@ let calcSetDifference = (u, v) => {
     return diffArray;
 };
 exports.calcSetDifference = calcSetDifference;
+let time_s = (label, procedure) => {
+    console.time(label);
+    procedure();
+    console.timeEnd(label);
+};
+exports.time_s = time_s;
+let time_a = (label, procedure) => __awaiter(void 0, void 0, void 0, function* () {
+    console.time(label);
+    yield procedure();
+    console.timeEnd(label);
+});
+exports.time_a = time_a;
 //# sourceMappingURL=Functions.js.map
