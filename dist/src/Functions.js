@@ -155,14 +155,16 @@ let calcSetDifference = (u, v) => {
 exports.calcSetDifference = calcSetDifference;
 let time_s = (label, procedure) => {
     console.time(label);
-    procedure();
+    let result = procedure();
     console.timeEnd(label);
+    return result;
 };
 exports.time_s = time_s;
 let time_a = (label, procedure) => __awaiter(void 0, void 0, void 0, function* () {
     console.time(label);
-    yield procedure();
+    let result = yield procedure();
     console.timeEnd(label);
+    return result;
 });
 exports.time_a = time_a;
 //# sourceMappingURL=Functions.js.map

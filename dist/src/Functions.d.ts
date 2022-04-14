@@ -20,5 +20,5 @@ export declare let generatePassword: (length?: number) => void;
 export declare let unique: <T>(x: T, i: number, a: T[]) => boolean;
 export declare let uniqueCompare: <T>(equal: (x: T, y: T) => boolean) => (x: T, i: number, a: T[]) => boolean;
 export declare let calcSetDifference: (u: Map<any, any>, v: Map<any, any>) => any[];
-export declare let time_s: (label: string, procedure: () => any) => void;
-export declare let time_a: (label: string, procedure: () => Promise<any>) => Promise<void>;
+export declare let time_s: <T>(label: string, procedure: () => T) => T;
+export declare let time_a: <T>(label: string, procedure: () => Promise<T>) => Promise<T>;

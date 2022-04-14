@@ -141,13 +141,15 @@ export let calcSetDifference = (u: Map<any, any>, v: Map<any, any>) => {
     });
     return diffArray;
 }
-export let time_s = (label: string, procedure: () => any) => {
+export let time_s = <T>(label: string, procedure: () => T) => {
     console.time(label);
-    procedure();
+    let result = procedure();
     console.timeEnd(label);
+    return result;
 }
-export let time_a = async (label: string, procedure: () => Promise<any>) => {
+export let time_a = async <T>(label: string, procedure: () => Promise<T>) => {
     console.time(label);
-    await procedure();
+    let result = await procedure();
     console.timeEnd(label);
+    return result;
 }
