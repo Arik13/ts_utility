@@ -30,7 +30,7 @@ export function deepCopy(obj1: any, obj2: any) {
             obj1[key] = el;
         }
         else if (Array.isArray(el)) {
-            el.map(item => JSON.parse(JSON.stringify(item)));
+            obj1[key] = el.map(item => JSON.parse(JSON.stringify(item)));;
         }
         else if (typeof(el) == "object") {
             obj1[key] = {};
