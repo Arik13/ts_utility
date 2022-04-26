@@ -6,17 +6,6 @@ export interface Permission {
 export interface Permissions {
     visible: Permission;
 }
-export declare enum ASSET_NAME {
-    FALSEY = 0,
-    DIRECTORY = 1,
-    IMAGE = 2,
-    COMPONENT_DEFINITION = 3,
-    SCRIPT = 4,
-    LOCATION = 5,
-    TOKEN = 6,
-    STATE_OBJECT = 7,
-    STATE_OBJECT_TEMPLATE = 8
-}
 export interface Directory {
     id?: string;
     name: string;
@@ -28,7 +17,6 @@ export interface Directory {
     base?: string;
     ext?: string;
     permissions: Permissions;
-    type: ASSET_NAME;
 }
 export declare class DirectoryMap {
     root: Directory;
@@ -54,7 +42,7 @@ export declare class DirectoryMap {
         id?: string;
         name?: string;
         dirID?: string;
-    }, ext: string, parentID: string, type: ASSET_NAME): Directory;
+    }, ext: string, parentID: string): Directory;
     createDir(name: string, parentID: string): Directory;
     rename(id: string, name: string): void;
     setPermissionLevel(dirID: string, permission: keyof Permissions, level: number): void;

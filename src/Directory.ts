@@ -13,17 +13,17 @@ export interface Permission {
 export interface Permissions {
     visible: Permission;
 }
-export enum ASSET_NAME {
-    FALSEY,
-    DIRECTORY,
-    IMAGE,
-    COMPONENT_DEFINITION,
-    SCRIPT,
-    LOCATION,
-    TOKEN,
-    STATE_OBJECT,
-    STATE_OBJECT_TEMPLATE,
-}
+// export enum ASSET_NAME {
+//     FALSEY,
+//     DIRECTORY,
+//     IMAGE,
+//     COMPONENT_DEFINITION,
+//     SCRIPT,
+//     LOCATION,
+//     TOKEN,
+//     STATE_OBJECT,
+//     STATE_OBJECT_TEMPLATE,
+// }
 
 export interface Directory {
     id?: string;
@@ -36,7 +36,7 @@ export interface Directory {
     base?: string;
     ext?: string;
     permissions: Permissions;
-    type: ASSET_NAME;
+    // type: ASSET_NAME;
 }
 
 let defaultPermissions = (): Permissions => ({
@@ -128,7 +128,7 @@ export class DirectoryMap {
             parentID: null,
             itemID: null,
             permissions: defaultPermissions(),
-            type: ASSET_NAME.DIRECTORY,
+            // type: ASSET_NAME.DIRECTORY,
         };
         this.idMap.set(this.root.id, this.root);
         return this.root;
@@ -181,7 +181,7 @@ export class DirectoryMap {
         this.idMap.delete(dir.id);
         this.pathMap.delete(dir.path);
     }
-    createAssetDir(asset: {id?: string, name?: string, dirID?: string}, ext: string, parentID: string, type: ASSET_NAME) {
+    createAssetDir(asset: {id?: string, name?: string, dirID?: string}, ext: string, parentID: string) {
         asset.dirID = genID();
         return this.set({
             id: asset.dirID,
@@ -191,7 +191,6 @@ export class DirectoryMap {
             itemID: asset.id,
             ext,
             permissions: defaultPermissions(),
-            type,
         });
     }
     createDir(name: string, parentID: string) {
@@ -202,7 +201,6 @@ export class DirectoryMap {
             parentID,
             itemID: null,
             permissions: defaultPermissions(),
-            type: ASSET_NAME.DIRECTORY,
         });
     }
     rename(id: string, name: string) {
