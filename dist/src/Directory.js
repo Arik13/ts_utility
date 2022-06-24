@@ -34,13 +34,18 @@ class DirectoryMap {
             insertionIndex = targetParent.children.findIndex(node => node.id == target.id) + 1;
             target = targetParent;
         }
+        // if (target.id == move.parentID) return false;
         if (this.isAncestor(move, target))
             return false;
         let moveParent = this.get(move.parentID);
-        let dragIndex = moveParent.children.findIndex(child => child.id == move.id);
-        moveParent.children.splice(dragIndex, 1);
+        let moveIndex = moveParent.children.findIndex(child => child.id == move.id);
+        moveParent.children.splice(moveIndex, 1);
         target.children.splice(insertionIndex, 0, move);
         move.parentID = target.id;
+        this.traverse(dir => {
+            this.pathMap.delete(dir.path);
+            dir.path = null;
+        }, move.id);
         this.resolveNameAndPath(move);
         this.sort(moveParent.id);
         this.sort(target.id);
@@ -79,7 +84,12 @@ class DirectoryMap {
     rename(id, name) {
         let dir = this.get(id);
         dir.name = name;
+        this.traverse(dir => {
+            this.pathMap.delete(dir.path);
+            dir.path = null;
+        }, dir.id);
         this.resolveNameAndPath(dir);
+        this.sort(this.get(dir.parentID).id);
         // this.initPaths(dir);
     }
     get(idOrPath) {
@@ -209,7 +219,7 @@ class DirectoryMap {
             var _a;
             pathStack.push(dir.name);
             dirMap.idMap.set(dir.id, dir);
-            dirMap.pathMap.delete(dir.path);
+            // dirMap.pathMap.delete(dir.path);
             let path = `${pathStack.join("/")}${(_a = dir.ext) !== null && _a !== void 0 ? _a : ""}`;
             dir.path = path;
             dirMap.pathMap.set(path, dir);
