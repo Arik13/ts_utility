@@ -2,7 +2,8 @@
 import { Monad } from "./Monads"
 import { Primitive } from "../Types";
 
-type Key = number | string;
+// type Key = number | string;
+type Key = string;
 type Types = "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined";
 interface Arg<T = any> {key: Key, val: T, parent: any}
 type Predicate = (x: Arg) => boolean;
@@ -53,7 +54,7 @@ let primMapper = (map: AnyMap, json: any) => {
     });
 }
 
-const renameKey = (oldKey: Key, newKey: Key, obj: any) => {
+let renameKey = (oldKey: Key, newKey: Key, obj: any) => {
     if (oldKey == newKey) return obj;
     Object.keys(obj).forEach(key => {
         if (key == oldKey) {

@@ -1,6 +1,6 @@
 import { Monad } from "./Monads";
 import { Primitive } from "../Types";
-declare type Key = number | string;
+declare type Key = string;
 declare type Types = "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined";
 interface Arg<T = any> {
     key: Key;

@@ -37,7 +37,7 @@ let primMapper = (map, json) => {
             arg.parent[arg.key] = map(arg);
     });
 };
-const renameKey = (oldKey, newKey, obj) => {
+let renameKey = (oldKey, newKey, obj) => {
     if (oldKey == newKey)
         return obj;
     Object.keys(obj).forEach(key => {

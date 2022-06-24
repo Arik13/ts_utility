@@ -77,15 +77,10 @@ export class DirectoryMap {
         moveParent.children.splice(dragIndex, 1);
         target.children.splice(insertionIndex, 0, move);
         move.parentID = target.id;
+        this.resolveNameAndPath(target);
         this.sort(moveParent.id);
         this.sort(target.id);
         return true;
-    }
-    isAncestor(superNode: Directory, subNode: Directory): boolean {
-        if (!superNode || ! subNode) return false;
-        if (superNode.id == subNode.id) return true;
-        if (!subNode.parentID) return false;
-        return this.isAncestor(superNode, this.get(subNode.parentID));
     }
     traverse(visit: (dir: Directory, dirMap?: DirectoryMap) => void, rootID?: string) {
         (function recurse(dir: Directory, dirMap: DirectoryMap) {
@@ -102,57 +97,25 @@ export class DirectoryMap {
         this.visitAssets(dir => assets.push(dir), rootID);
         return assets.map(dir => cb(dir, this));
     }
-    private initPaths(dir: Directory) {
-        let pathStack: string[] = [];
-        if (dir.parentID) {
-            pathStack.push(this.get(dir.parentID).path);
-        }
-        (function recurse(dir: Directory, dirMap: DirectoryMap) {
-            pathStack.push(dir.name);
-            dirMap.idMap.set(dir.id, dir);
-            let path = `${pathStack.join("/")}${dir.ext ?? ""}`;
-            dir.path = path;
-            dirMap.pathMap.set(path, dir);
-            dir.children.forEach(subDir => recurse(subDir, dirMap));
-            pathStack.pop();
-        })(dir, this);
-    }
     add(dir: Directory) {
         return this.has(dir.id)? null : this.set(dir);
-    }
-    private setRoot(dir?: Directory) {
-        this.root = {
-            id: genID(),
-            name: "",
-            children: dir?.children ?? [],
-            parentID: null,
-            itemID: null,
-            permissions: defaultPermissions(),
-            // type: ASSET_NAME.DIRECTORY,
-        };
-        this.idMap.set(this.root.id, this.root);
-        return this.root;
     }
     set(dir: Directory) {
         let parent = this.get(dir.parentID);
         parent.children.push(dir);
-        this.sort(parent.id);
-
+        this.resolveNameAndPath(dir);
         this.idMap.set(dir.id, dir);
-        dir.path = `${parent.path}/${dir.name}${dir.ext ?? ""}`;
         this.pathMap.set(dir.path, dir);
+        this.sort(parent.id);
         return dir;
     }
-    sort(id: string = null) {
-        let dir = id? this.get(id) : this.root;
-        dir.children.sort((a, b) => {
-            if (a.itemID && !b.itemID) return 1;
-            else if (b.itemID && !a.itemID) return -1;
-            else if (a.name < b.name) return -1;
-            else if (a.name > b.name) return 1;
-            return 0;
-        });
+    rename(id: string, name: string) {
+        let dir = this.get(id);
+        dir.name = name;
+        this.resolveNameAndPath(dir);
+        // this.initPaths(dir);
     }
+
     get(idOrPath: string) {
         return this.idMap.get(idOrPath) ?? this.pathMap.get(idOrPath);
     }
@@ -203,11 +166,6 @@ export class DirectoryMap {
             permissions: defaultPermissions(),
         });
     }
-    rename(id: string, name: string) {
-        let dir = this.get(id)
-        dir.name = name;
-        this.initPaths(dir);
-    }
 
     // // PERMISSIONS
     // setVisiblityLevel(dirID: string, level: PERMISSION_LEVEL) {
@@ -235,5 +193,63 @@ export class DirectoryMap {
     }
     removePermissionExceptionOnTree(dirID: string, permission: keyof Permissions, exceptionID: string) {
         this.traverse(dir => dir.permissions[permission].exceptions.remove(x => x === exceptionID), dirID);
+    }
+    private isAncestor(superNode: Directory, subNode: Directory): boolean {
+        if (!superNode || ! subNode) return false;
+        if (superNode.id == subNode.id) return true;
+        if (!subNode.parentID) return false;
+        return this.isAncestor(superNode, this.get(subNode.parentID));
+    }
+    private resolveNameAndPath(dir: Directory) {
+        let parent = this.get(dir.parentID);
+        let path = `${parent.path}/${dir.name}${dir.ext ?? ""}`;
+        let baseName = dir.name;
+        let i = 1;
+        while (this.pathMap.get(path)) {
+            dir.name = `${baseName} (${i})`
+            path = `${parent.path}/${dir.name}${dir.ext ?? ""}`;
+            i++;
+        }
+        dir.path = path;
+        this.initPaths(dir);
+    }
+    private sort(id: string = null) {
+        let dir = id? this.get(id) : this.root;
+        dir.children.sort((a, b) => {
+            if (a.itemID && !b.itemID) return 1;
+            else if (b.itemID && !a.itemID) return -1;
+            else if (a.name < b.name) return -1;
+            else if (a.name > b.name) return 1;
+            return 0;
+        });
+    }
+    private initPaths(dir: Directory) {
+        let pathStack: string[] = [];
+        if (dir.parentID) {
+            pathStack.push(this.get(dir.parentID).path);
+        }
+        (function recurse(dir: Directory, dirMap: DirectoryMap) {
+            pathStack.push(dir.name);
+            dirMap.idMap.set(dir.id, dir);
+            dirMap.pathMap.delete(dir.path);
+            let path = `${pathStack.join("/")}${dir.ext ?? ""}`;
+            dir.path = path;
+            dirMap.pathMap.set(path, dir);
+            dir.children.forEach(subDir => recurse(subDir, dirMap));
+            pathStack.pop();
+        })(dir, this);
+    }
+    private setRoot(dir?: Directory) {
+        this.root = {
+            id: genID(),
+            name: "",
+            children: dir?.children ?? [],
+            parentID: null,
+            itemID: null,
+            permissions: defaultPermissions(),
+            // type: ASSET_NAME.DIRECTORY,
+        };
+        this.idMap.set(this.root.id, this.root);
+        return this.root;
     }
 }

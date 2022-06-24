@@ -25,15 +25,12 @@ export declare class DirectoryMap {
     constructor(root?: Directory);
     reset(root: Directory): this;
     move(moveID: string, targetID: string): boolean;
-    isAncestor(superNode: Directory, subNode: Directory): boolean;
     traverse(visit: (dir: Directory, dirMap?: DirectoryMap) => void, rootID?: string): void;
     visitAssets(visit: (dir: Directory, dirMap?: DirectoryMap) => void, rootID?: string): void;
     mapAssets<T>(cb: (dir: Directory, dirMap?: DirectoryMap) => T, rootID?: string): T[];
-    private initPaths;
     add(dir: Directory): Directory;
-    private setRoot;
     set(dir: Directory): Directory;
-    sort(id?: string): void;
+    rename(id: string, name: string): void;
     get(idOrPath: string): Directory;
     has(idOrPath: string): boolean;
     map<T>(cb: (dir: Directory) => T, idOrPath?: string): T[];
@@ -44,11 +41,15 @@ export declare class DirectoryMap {
         dirID?: string;
     }, ext: string, parentID: string): Directory;
     createDir(name: string, parentID: string): Directory;
-    rename(id: string, name: string): void;
     setPermissionLevel(dirID: string, permission: keyof Permissions, level: number): void;
     setPermissionLevelOnTree(dirID: string, permission: keyof Permissions, level: number): void;
     addPermissionException(dirID: string, permission: keyof Permissions, exceptionID: string): void;
     addPermissionExceptionOnTree(dirID: string, permission: keyof Permissions, exceptionID: string): void;
     removePermissionException(dirID: string, permission: keyof Permissions, exceptionID: string): void;
     removePermissionExceptionOnTree(dirID: string, permission: keyof Permissions, exceptionID: string): void;
+    private isAncestor;
+    private resolveNameAndPath;
+    private sort;
+    private initPaths;
+    private setRoot;
 }
