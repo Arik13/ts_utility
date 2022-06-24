@@ -1,12 +1,17 @@
 import "module-alias/register";
-import { JSONMonad } from "@util/Monads/JSONMonad";
+// import "@util/PrototypeExtensions";
 
-new JSONMonad({
-    test: "x",
-    test2: "y",
-    test3: "z",
-}).traversePaths(x => {
-    console.log(x.val);
-    if (x.val == "x") return "end";
+// import { DirectoryMap, genID } from "@util/Directory";
+// import { deeplog } from "@util/Functions";
+// let dirMap = new DirectoryMap();
 
-})
+// let newDir1 = dirMap.createDir("test", dirMap.root.id);
+// let newDir2 = dirMap.createDir("test", dirMap.root.id);
+// let newAssetDir = dirMap.createAssetDir(
+//     {dirID: null, id: genID(), name: "asset"},
+//     ".ass",
+//     newDir1.id,
+// );
+// deeplog(dirMap.root);
+// dirMap.move(newAssetDir.id, newDir1.id);
+// deeplog(dirMap.root);

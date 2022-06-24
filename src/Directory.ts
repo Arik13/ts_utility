@@ -77,7 +77,7 @@ export class DirectoryMap {
         moveParent.children.splice(dragIndex, 1);
         target.children.splice(insertionIndex, 0, move);
         move.parentID = target.id;
-        this.resolveNameAndPath(target);
+        this.resolveNameAndPath(move);
         this.sort(moveParent.id);
         this.sort(target.id);
         return true;
@@ -149,21 +149,23 @@ export class DirectoryMap {
         return this.set({
             id: asset.dirID,
             name: asset.name,
-            children: [],
+            path: null,
             parentID,
             itemID: asset.id,
             ext,
             permissions: defaultPermissions(),
+            children: [],
         });
     }
     createDir(name: string, parentID: string) {
         return this.set({
             id: genID(),
             name,
-            children: [],
+            path: null,
             parentID,
             itemID: null,
             permissions: defaultPermissions(),
+            children: [],
         });
     }
 
@@ -243,10 +245,11 @@ export class DirectoryMap {
         this.root = {
             id: genID(),
             name: "",
-            children: dir?.children ?? [],
+            path: null,
             parentID: null,
             itemID: null,
             permissions: defaultPermissions(),
+            children: dir?.children ?? [],
             // type: ASSET_NAME.DIRECTORY,
         };
         this.idMap.set(this.root.id, this.root);
