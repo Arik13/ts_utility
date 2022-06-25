@@ -15,5 +15,7 @@ import "module-alias/register";
 // deeplog(dirMap.root);
 // dirMap.move(newAssetDir.id, newDir1.id);
 // dirMap.rename(newAssetDir.id, "RENAMED ASSET");
-// dirMap.rename(newDir1.id, "RENAMED DIRECTORY");
+// dirMap.rename(newAssetDir.id, "RENAMED ASSET");
+// dirMap.rename(newAssetDir.id, "RENAMED ASSET");
+// // dirMap.rename(newDir1.id, "RENAMED DIRECTORY");
 // deeplog(dirMap.root);
