@@ -228,15 +228,15 @@ class DirectoryMap {
         })(dir, this);
     }
     setRoot(dir) {
-        var _a;
+        var _a, _b;
         this.root = {
-            id: (0, exports.genID)(),
+            id: (_a = dir === null || dir === void 0 ? void 0 : dir.id) !== null && _a !== void 0 ? _a : (0, exports.genID)(),
             name: "",
-            path: null,
+            path: "",
             parentID: null,
             itemID: null,
             permissions: defaultPermissions(),
-            children: (_a = dir === null || dir === void 0 ? void 0 : dir.children) !== null && _a !== void 0 ? _a : [],
+            children: (_b = dir === null || dir === void 0 ? void 0 : dir.children) !== null && _b !== void 0 ? _b : [],
             // type: ASSET_NAME.DIRECTORY,
         };
         this.idMap.set(this.root.id, this.root);

@@ -253,9 +253,9 @@ export class DirectoryMap {
     }
     private setRoot(dir?: Directory) {
         this.root = {
-            id: genID(),
+            id: dir?.id ?? genID(),
             name: "",
-            path: null,
+            path: "",
             parentID: null,
             itemID: null,
             permissions: defaultPermissions(),
