@@ -48,7 +48,8 @@ function deepCopy(obj1, obj2) {
 }
 exports.deepCopy = deepCopy;
 function deepClone(obj) {
-    return deepCopy({}, obj);
+    return JSON.parse(JSON.stringify(obj));
+    // return deepCopy({}, obj);
 }
 exports.deepClone = deepClone;
 function isObject(object) {
