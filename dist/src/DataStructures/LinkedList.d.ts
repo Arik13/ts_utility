@@ -12,7 +12,7 @@ export declare class LinkedList<T> {
     toArray(): T[];
     toString(): string;
     find(predicate: (value: T, index?: number) => boolean): T;
-    findIndex(predicate: (value: any, index: number) => boolean): number;
+    findIndex(predicate: (value: T, index: number) => boolean): number;
     indexOf(searchElement: T): number;
     includes(searchElement: T): boolean;
     shift(): T;

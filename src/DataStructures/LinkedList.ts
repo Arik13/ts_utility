@@ -6,8 +6,8 @@ interface LL_Node<T> {
 }
 
 class IndexOutOfRangeError extends Error {
-    constructor() {
-        super("Index out of range");
+    constructor(index: number) {
+        super(`Index out of range: ${index}`);
     }
 }
 
@@ -19,15 +19,15 @@ export class LinkedList<T> {
         this.init(array);
     }
     get(index: number) {
-        if (index >= this.size || index < 0) throw new IndexOutOfRangeError();
+        if (index >= this.size || index < 0) throw new IndexOutOfRangeError(index);
         return this.getNode(index).data;
     }
     set(index: number, data: T) {
-        if (index >= this.size || index < 0) throw new IndexOutOfRangeError();
+        if (index >= this.size || index < 0) throw new IndexOutOfRangeError(index);
         this.getNode(index).data = data;
     }
     insert(index: number, data: T) {
-        if (index > this.size || index < 0) throw new IndexOutOfRangeError();
+        if (index > this.size || index < 0) throw new IndexOutOfRangeError(index);
 
         let nextNode = this.getNode(index);
         let prevNode = nextNode.prev;
@@ -41,7 +41,7 @@ export class LinkedList<T> {
         this.size++;
     }
     delete(index: number) {
-        if (index >= this.size || index < 0) throw new IndexOutOfRangeError();
+        if (index >= this.size || index < 0) throw new IndexOutOfRangeError(index);
         let deleteNode = this.getNode(index);
         let prevNode = deleteNode.prev;
         let nextNode = deleteNode.next;
@@ -91,7 +91,7 @@ export class LinkedList<T> {
         });
         return data;
     }
-    findIndex(predicate: (value: any, index: number) => boolean) {
+    findIndex(predicate: (value: T, index: number) => boolean) {
         let returnedIndex = -1;
         this.traverse((node, index) => {
             if (predicate(node.data, index)) {
@@ -177,10 +177,8 @@ export class LinkedList<T> {
         this.traverse((node, index) => callback(node.data, index))
     }
     swap(indexOne: number, indexTwo: number) {
-        if (
-            indexOne >= this.size || indexOne < 0 ||
-            indexTwo >= this.size || indexTwo < 0
-        ) throw new IndexOutOfRangeError();
+        if (indexOne >= this.size || indexOne < 0) throw new IndexOutOfRangeError(indexOne);
+        if (indexTwo >= this.size || indexTwo < 0) throw new IndexOutOfRangeError(indexTwo);
         let node1 = this.getNode(indexOne);
         let node2 = this.getNode(indexTwo);
         let swapVar = node1.data;
@@ -237,10 +235,8 @@ export class LinkedList<T> {
         this.head.next = rightNode;
     }
     move(startIndex: number, endIndex: number) {
-        if (
-            startIndex >= this.size || startIndex < 0 ||
-            endIndex >= this.size || endIndex < 0
-        ) throw new IndexOutOfRangeError();
+        if (startIndex >= this.size || startIndex < 0) throw new IndexOutOfRangeError(startIndex);
+        if (endIndex >= this.size || endIndex < 0) throw new IndexOutOfRangeError(endIndex);
         let node1 = this.getNode(startIndex);
         this.delete(startIndex);
         this.insert(endIndex, node1.data);
