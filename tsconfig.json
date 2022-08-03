@@ -72,7 +72,10 @@
         "resolveJsonModule": true,
         "typeRoots": [
             "node_modules/@types"
-        ]
+        ],
+        "plugins": [
+            { "transform": "./src/ts/customTransform.ts" },
+        ],
     },
     "exclude": [
         "node_modules",

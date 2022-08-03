@@ -6,7 +6,7 @@
         "start": "ts-node-dev --respawn --cls --exit-child --ignore-watch node_modules app.ts",
         "update": "",
         "test": "tsc --noEmit",
-        "build": "tsc",
+        "build": "ttsc",
         "clean": "rmdir /s /q dist"
     },
     "author": "Arik Dicks",
@@ -24,6 +24,7 @@
         "nodemon": "^2.0.15",
         "ts-node": "^8.10.1",
         "ts-node-dev": "^1.1.8",
+        "ttypescript": "^1.5.13",
         "typescript": "^4.3.2"
     },
     "_moduleAliases": {
