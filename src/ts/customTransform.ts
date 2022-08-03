@@ -3,8 +3,8 @@ export default function (/*opts?: Opts*/) {
     function visitor(ctx: ts.TransformationContext, sf: ts.SourceFile) {
         const visitor: ts.Visitor = (node: ts.Node): ts.VisitResult<any> => {
             if (
-                node.parent?.kind != ts.SyntaxKind.ImportDeclaration
-                || node.kind != ts.SyntaxKind.StringLiteral
+                node.parent?.kind == ts.SyntaxKind.ImportDeclaration
+                && node.kind == ts.SyntaxKind.StringLiteral
             ) {
                 let text = node.getText();
                 let path = text.substring(1, text.length - 1);

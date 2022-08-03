@@ -5,16 +5,16 @@ function default_1( /*opts?: Opts*/) {
     function visitor(ctx, sf) {
         const visitor = (node) => {
             var _a;
-            if (((_a = node.parent) === null || _a === void 0 ? void 0 : _a.kind) != ts.SyntaxKind.ImportDeclaration
-                || node.kind != ts.SyntaxKind.StringLiteral) {
+            if (((_a = node.parent) === null || _a === void 0 ? void 0 : _a.kind) == ts.SyntaxKind.ImportDeclaration
+                && node.kind == ts.SyntaxKind.StringLiteral) {
                 let text = node.getText();
                 let path = text.substring(1, text.length - 1);
                 let pathArray = path.split("/");
                 let dict = {
-                    "": "",
-                    "vtt_shared/dist/src": "vtt_shared/dist/src",
-                    "node_utility/dist/src": "node_utility/dist/src",
-                    "ts_utility/dist/src": "ts_utility/dist/src",
+                    "@root": "",
+                    "@shared": "vtt_shared/dist/src",
+                    "@node": "node_utility/dist/src",
+                    "@util": "ts_utility/dist/src",
                 };
                 if (dict[pathArray[0]] !== undefined) {
                     pathArray[0] = dict[pathArray[0]];
