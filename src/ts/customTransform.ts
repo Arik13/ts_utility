@@ -10,7 +10,7 @@ export default function (/*opts?: Opts*/) {
                 let path = text.substring(1, text.length - 1);
                 let pathArray = path.split("/");
                 let dict: any = {
-                    "@root": "",
+                    "@root": "src/",
                     "@shared": "vtt_shared/dist/src",
                     "@node": "node_utility/dist/src",
                     "@util": "ts_utility/dist/src",
