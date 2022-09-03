@@ -1,6 +1,4 @@
-import * as mong from "mongoose";
-
-export const genID = () => new mong.Types.ObjectId().toString();
+import { genID } from "./Functions";
 
 // export enum PERMISSION_LEVEL {
 //     GM,

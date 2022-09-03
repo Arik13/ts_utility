@@ -1,4 +1,4 @@
-import { Key } from "@util/Types";
+import { Key } from "../Types";
 import { extendPrototypeFromClassObj } from "./ExtendPrototype";
 
 export {}

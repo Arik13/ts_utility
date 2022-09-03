@@ -1,4 +1,4 @@
-import { StringMonad, NumberMonad } from "@util/Monads/Monads";
+import { StringMonad, NumberMonad } from "../Monads/Monads";
 import { Primitive } from "../Types";
 
 interface ColumnStyle {

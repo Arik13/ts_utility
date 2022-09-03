@@ -1,3 +1,5 @@
+import * as uuid from "short-uuid";
+export declare const genID: () => uuid.SUUID;
 export declare function deeplog(...args: any[]): void;
 export declare function deeplogN(n: number, ...args: any[]): void;
 export declare const compose: <T, V>(...args: readonly [(x: T) => any, ...any[], (x: any) => V]) => (x: V) => T;

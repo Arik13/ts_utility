@@ -2,35 +2,118 @@
     "name": "ts_utility",
     "version": "1.0.76",
     "description": "",
+    "main": "./lib/src/index.js",
+    "types": "./lib/src/index.d.ts",
     "scripts": {
-        "start": "ts-node-dev --respawn --cls --exit-child --ignore-watch node_modules app.ts",
-        "update": "",
-        "test": "tsc --noEmit",
-        "build": "ttsc",
-        "clean": "rmdir /s /q dist"
+        "test": "tsc --noEmit -p .",
+        "build": "tsc -p . && ../vtt-dev-ops/scripts/build-exports.ps1"
     },
     "author": "Arik Dicks",
     "license": "ISC",
     "dependencies": {
-        "change-case": "^4.1.2",
-        "module-alias": "^2.2.2",
-        "mongoose": "^6.0.4",
+        "short-uuid": "^4.2.0",
         "source-map-support": "^0.5.20"
     },
     "devDependencies": {
-        "@types/mongoose": "^5.11.97",
         "@types/node": "^14.0.1",
         "@types/source-map-support": "^0.5.4",
-        "nodemon": "^2.0.15",
-        "ts-node": "^8.10.1",
-        "ts-node-dev": "^1.1.8",
-        "ttypescript": "^1.5.13",
         "typescript": "^4.3.2"
     },
-    "_moduleAliases": {
-        "@util": "./src"
-    },
     "files": [
-        "/dist"
-    ]
+        "/lib"
+    ],
+    "exports": {
+        "./DataStructures/AutoSyncQueue": "./lib/src/DataStructures/AutoSyncQueue.js",
+        "./DataStructures/LinkedList": "./lib/src/DataStructures/LinkedList.js",
+        "./DataStructures/LinkedListTestCases": "./lib/src/DataStructures/LinkedListTestCases.js",
+        "./Directory": "./lib/src/Directory.js",
+        "./Err": "./lib/src/Err.js",
+        "./Extensions/Array": "./lib/src/Extensions/Array.js",
+        "./Extensions/ExtendPrototype": "./lib/src/Extensions/ExtendPrototype.js",
+        "./Extensions/Function": "./lib/src/Extensions/Function.js",
+        "./Extensions": "./lib/src/Extensions/index.js",
+        "./Extensions/Map": "./lib/src/Extensions/Map.js",
+        "./Extensions/Set": "./lib/src/Extensions/Set.js",
+        "./Functions": "./lib/src/Functions.js",
+        "./HTTP": "./lib/src/HTTP/index.js",
+        "./Log/TablePrinter": "./lib/src/Log/TablePrinter.js",
+        "./Math/Vector": "./lib/src/Math/Vector.js",
+        "./Monads/JSONMonad": "./lib/src/Monads/JSONMonad.js",
+        "./Monads/Maybe": "./lib/src/Monads/Maybe.js",
+        "./Monads/Monads": "./lib/src/Monads/Monads.js",
+        "./Objects": "./lib/src/Objects/index.js",
+        "./Strings": "./lib/src/Strings/index.js",
+        "./Strings/numberToWord": "./lib/src/Strings/numberToWord.js",
+        "./Types": "./lib/src/Types.js"
+    },
+    "typesVersions": {
+        "*": {
+            "DataStructures/AutoSyncQueue": [
+                "./lib/src/DataStructures/AutoSyncQueue.d.ts"
+            ],
+            "DataStructures/LinkedList": [
+                "./lib/src/DataStructures/LinkedList.d.ts"
+            ],
+            "DataStructures/LinkedListTestCases": [
+                "./lib/src/DataStructures/LinkedListTestCases.d.ts"
+            ],
+            "Directory": [
+                "./lib/src/Directory.d.ts"
+            ],
+            "Err": [
+                "./lib/src/Err.d.ts"
+            ],
+            "Extensions/Array": [
+                "./lib/src/Extensions/Array.d.ts"
+            ],
+            "Extensions/ExtendPrototype": [
+                "./lib/src/Extensions/ExtendPrototype.d.ts"
+            ],
+            "Extensions/Function": [
+                "./lib/src/Extensions/Function.d.ts"
+            ],
+            "Extensions": [
+                "./lib/src/Extensions/index.d.ts"
+            ],
+            "Extensions/Map": [
+                "./lib/src/Extensions/Map.d.ts"
+            ],
+            "Extensions/Set": [
+                "./lib/src/Extensions/Set.d.ts"
+            ],
+            "Functions": [
+                "./lib/src/Functions.d.ts"
+            ],
+            "HTTP": [
+                "./lib/src/HTTP/index.d.ts"
+            ],
+            "Log/TablePrinter": [
+                "./lib/src/Log/TablePrinter.d.ts"
+            ],
+            "Math/Vector": [
+                "./lib/src/Math/Vector.d.ts"
+            ],
+            "Monads/JSONMonad": [
+                "./lib/src/Monads/JSONMonad.d.ts"
+            ],
+            "Monads/Maybe": [
+                "./lib/src/Monads/Maybe.d.ts"
+            ],
+            "Monads/Monads": [
+                "./lib/src/Monads/Monads.d.ts"
+            ],
+            "Objects": [
+                "./lib/src/Objects/index.d.ts"
+            ],
+            "Strings": [
+                "./lib/src/Strings/index.d.ts"
+            ],
+            "Strings/numberToWord": [
+                "./lib/src/Strings/numberToWord.d.ts"
+            ],
+            "Types": [
+                "./lib/src/Types.d.ts"
+            ]
+        }
+    }
 }

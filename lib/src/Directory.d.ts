@@ -1,4 +1,3 @@
-export declare const genID: () => string;
 export interface Permission {
     level: number;
     exceptions: string[];
