@@ -112,6 +112,9 @@ export class DirectoryMap {
         this.sort(parent.id);
         return dir;
     }
+    // update(dir: Directory) {
+    //
+    // }
     rename(id: string, name: string) {
         let dir = this.get(id);
         dir.name = name;
@@ -121,9 +124,7 @@ export class DirectoryMap {
         }, dir.id);
         this.resolveNameAndPath(dir);
         this.sort(this.get(dir.parentID).id);
-        // this.initPaths(dir);
     }
-
     get(idOrPath: string) {
         return this.idMap.get(idOrPath) ?? this.pathMap.get(idOrPath);
     }
@@ -152,14 +153,13 @@ export class DirectoryMap {
         this.idMap.delete(dir.id);
         this.pathMap.delete(dir.path);
     }
-    createAssetDir(asset: {id?: string, name?: string, dirID?: string}, ext: string, parentID: string) {
-        asset.dirID = genID();
+    createAssetDir(name: string, parentID: string, itemID?: string, ext?: string) {
         return this.set({
-            id: asset.dirID,
-            name: asset.name,
+            id: genID(),
+            name,
             path: null,
             parentID,
-            itemID: asset.id,
+            itemID,
             ext,
             permissions: defaultPermissions(),
             children: [],
@@ -176,7 +176,6 @@ export class DirectoryMap {
             children: [],
         });
     }
-
     // // PERMISSIONS
     // setVisiblityLevel(dirID: string, level: PERMISSION_LEVEL) {
     //     this.setPermission(dirID, "visible", level);
@@ -184,14 +183,12 @@ export class DirectoryMap {
     // setTreeVisiblityLevel(dirID: string, level: PERMISSION_LEVEL) {
     //     this.setPermissionsOnTree(dirID, "visible", level);
     // }
-
     setPermissionLevel(dirID: string, permission: keyof Permissions, level: number) {
         this.get(dirID).permissions[permission].level = level;
     }
     setPermissionLevelOnTree(dirID: string, permission: keyof Permissions, level: number) {
         this.traverse(dir => dir.permissions[permission].level = level, dirID);
     }
-
     addPermissionException(dirID: string, permission: keyof Permissions, exceptionID: string) {
         this.get(dirID).permissions[permission].exceptions.push(exceptionID);
     }

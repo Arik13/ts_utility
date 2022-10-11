@@ -34,11 +34,7 @@ export declare class DirectoryMap {
     has(idOrPath: string): boolean;
     map<T>(cb: (dir: Directory) => T, idOrPath?: string): T[];
     delete(id: string): void;
-    createAssetDir(asset: {
-        id?: string;
-        name?: string;
-        dirID?: string;
-    }, ext: string, parentID: string): Directory;
+    createAssetDir(name: string, parentID: string, itemID?: string, ext?: string): Directory;
     createDir(name: string, parentID: string): Directory;
     setPermissionLevel(dirID: string, permission: keyof Permissions, level: number): void;
     setPermissionLevelOnTree(dirID: string, permission: keyof Permissions, level: number): void;

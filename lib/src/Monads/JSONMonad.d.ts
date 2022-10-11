@@ -7,9 +7,9 @@ interface Arg<T = any> {
     val: T;
     parent: any;
 }
-declare type Predicate = (x: Arg) => boolean;
-declare type AnyMap = (arg: Arg) => any;
-declare type KeyMap = (arg: Arg) => Key;
+declare type Predicate = (x: PathArg) => boolean;
+declare type AnyMap = (arg: PathArg) => any;
+declare type KeyMap = (arg: PathArg) => Key;
 declare type PathArg = {
     path: Key[];
     key: Key;
@@ -28,15 +28,15 @@ export declare class JSONMonad extends Monad<any> {
     static id: number;
     constructor(json: any);
     map(map: AnyMap): JSONMonad;
-    traverse(visitor: AnyMap): JSONMonad;
-    traversePaths(visitor: PathVisitor): JSONMonad;
-    visit(predicate: (arg: Arg) => boolean, visitor: AnyMap): JSONMonad;
-    visitKeys(key: Key, visitor: (arg: Arg) => void): JSONMonad;
-    visitOpts(opts: Options, visitor: (arg: Arg) => void): JSONMonad;
-    filter(predicate: (arg: Arg) => boolean): JSONMonad;
+    private createRootPathArg;
+    traverse(visitor: PathVisitor): JSONMonad;
+    visit(predicate: (arg: PathArg) => boolean, visitor: AnyMap): JSONMonad;
+    visitKeys(key: Key, visitor: (arg: PathArg) => void): JSONMonad;
+    visitOpts(opts: Options, visitor: (arg: PathArg) => void): JSONMonad;
+    filter(predicate: (arg: PathArg) => boolean): JSONMonad;
     anyMap(map: AnyMap): JSONMonad;
-    predicateMap(predicate: (arg: Arg) => boolean, map: AnyMap): JSONMonad;
-    primMap(map: (arg: Arg<Primitive>) => Primitive): JSONMonad;
+    predicateMap(predicate: (arg: PathArg) => boolean, map: AnyMap): JSONMonad;
+    primMap(map: (arg: PathArg) => Primitive): JSONMonad;
     keyMap(map: KeyMap): JSONMonad;
     copyKey(oldKey: Key, newKey: Key): JSONMonad;
     keyValMap(key: Key, map: AnyMap): JSONMonad;

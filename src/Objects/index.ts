@@ -1,3 +1,5 @@
+import { JSONMonad } from "../Monads/JSONMonad";
+
 export function deepEqual(object1: any, object2: any) {
     if (typeof object1 != "object" || typeof object2 != "object")
         return object1 === object2;
@@ -22,6 +24,33 @@ export function deepEqual(object1: any, object2: any) {
     }
     return true;
 }
+export let deepMerge = (...objs: any[]) => {
+    let rootObj = {};
+    let initValueAtPath = (obj: any, path: string[], val: any) => {
+        // console.log(obj, path, val);
+        let valKey = path[path.length - 1];
+        let subObj = obj;
+        for (let i = 0; i < path.length - 1; i++) {
+            subObj = subObj[path[i]] ??= {}
+        }
+        // path.forEach(pathEl => subObj = subObj[pathEl] ??= {});
+        subObj[valKey] = val;
+    }
+    objs.forEach(obj => {
+        new JSONMonad(obj)
+            .traverse(x => {
+                if (typeof x.val === "string" || typeof x.val === "number" || typeof x.val === "boolean") {
+                    try {
+                        initValueAtPath(rootObj, x.path, x.val);
+                    }
+                    catch {
+                        throw new Error(`${x.path.join(".")} failed to merge`)
+                    }
+                }
+            })
+    })
+    return rootObj;
+}
 
 export function deepCopy(obj1: any, obj2: any) {
     for (let key in obj2) {
@@ -42,7 +71,7 @@ export function deepCopy(obj1: any, obj2: any) {
     }
     return obj1;
 }
-export function deepClone(obj: any) {
+export function deepClone<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj));
     // return deepCopy({}, obj);
 }

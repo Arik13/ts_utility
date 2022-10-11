@@ -1,14 +1,15 @@
 // import * as fs from "fs";
 import { Monad } from "./Monads"
 import { Primitive } from "../Types";
+import { deepClone } from "../Objects";
 
 // type Key = number | string;
 type Key = string;
 type Types = "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined";
 interface Arg<T = any> {key: Key, val: T, parent: any}
-type Predicate = (x: Arg) => boolean;
-type AnyMap = (arg: Arg) => any;
-type KeyMap = (arg: Arg) => Key;
+type Predicate = (x: PathArg) => boolean;
+type AnyMap = (arg: PathArg) => any;
+type KeyMap = (arg: PathArg) => Key;
 type PathArg = {path: Key[], key: Key, val: any, parent: any, root: any};
 type PathVisitor = (arg: PathArg) => any;
 interface Options {
@@ -30,29 +31,30 @@ let pathTraverser = (arg: PathArg, visitor: PathVisitor) => {
             val: arg.val[key],
             root: arg.root,
         };
-        if (visitor(newArg) !== "end") {
-            pathTraverser(newArg, visitor);
-        }
+        visitor(newArg);
+        pathTraverser(newArg, visitor);
+        // if (visitor(newArg) !== "end") {
+        // }
         arg.path.pop();
     }
     return arg.val;
 }
-let traverser = (val: any, key: Key, parent: any, visitor: AnyMap) => {
-    visitor({val, key, parent});
-    if (typeof val == "object") {
-        for (let objKey in val) {
-            traverser(val[objKey], objKey, val, visitor);
-        }
-    }
-    return val;
-}
+// let traverser = (val: any, key: Key, parent: any, visitor: AnyMap) => {
+//     visitor({val, key, parent});
+//     if (typeof val == "object") {
+//         for (let objKey in val) {
+//             traverser(val[objKey], objKey, val, visitor);
+//         }
+//     }
+//     return val;
+// }
 
-let primMapper = (map: AnyMap, json: any) => {
-    return traverser(json, null, null, arg => {
-        if (typeof arg.val != "object")
-            arg.parent[arg.key] = map(arg);
-    });
-}
+// let primMapper = (map: AnyMap, json: any) => {
+//     return traverser(json, null, null, arg => {
+//         if (typeof arg.val != "object")
+//             arg.parent[arg.key] = map(arg);
+//     });
+// }
 
 let renameKey = (oldKey: Key, newKey: Key, obj: any) => {
     if (oldKey == newKey) return obj;
@@ -70,59 +72,71 @@ let renameKey = (oldKey: Key, newKey: Key, obj: any) => {
     return obj;
 }
 
-let keyMapper = (map: KeyMap, json: any) => {
-    Object.keys(json).forEach(key => {
-        traverser(json[key], key, json, arg => {
-            if (Array.isArray(arg.parent)) return;
-            renameKey(arg.key, map(arg), arg.parent);
-        });
-    })
-    return json;
-}
-let cloneObj = (obj: any) => JSON.parse(JSON.stringify(obj));
+// let keyMapper = (map: KeyMap, json: any) => {
+//     Object.keys(json).forEach(key => {
+//         traverser(json[key], key, json, arg => {
+//             if (Array.isArray(arg.parent)) return;
+//             renameKey(arg.key, map(arg), arg.parent);
+//         });
+//     })
+//     return json;
+// }
+// let cloneObj = (obj: any) => JSON.parse(JSON.stringify(obj));
 
-let anyMapper = (map: KeyMap, json: any) => {
-    map({val: json, key: null, parent: null});
-    for (let key in json)
-        traverser(json[key], key, json, arg => arg.parent[arg.key] = map(arg));
-    return json;
-}
+// let anyMapper = (map: KeyMap, json: any) => {
+//     map({val: json, key: null, parent: null});
+//     for (let key in json)
+//         traverser(json[key], key, json, arg => arg.parent[arg.key] = map(arg));
+//     return json;
+// }
 
 export class JSONMonad extends Monad<any> {
     static id = 0;
-    constructor(json: any) {super(cloneObj(json))}
+    constructor(json: any) {super(deepClone(json))}
     map(map: AnyMap) {
         return JSONMonad.new(map(this.clone()));
     }
-    traverse(visitor: AnyMap) {
-        return JSONMonad.new(traverser(this.clone(), null, null, visitor));
+    // traverse(visitor: AnyMap) {
+    //     return JSONMonad.new(traverser(this.clone(), null, null, visitor));
+    // }
+    private createRootPathArg(): PathArg {
+        return {root: this.clone(), val: this.clone(), path: [], key: null, parent: null};
     }
-    traversePaths(visitor: PathVisitor) {
-        return JSONMonad.new(pathTraverser({root: this.clone(), val: this.clone(), path: [], key: null, parent: null}, visitor));
+    traverse(visitor: PathVisitor) {
+        return JSONMonad.new(pathTraverser(this.createRootPathArg(), visitor));
     }
-    visit(predicate: (arg: Arg) => boolean, visitor: AnyMap) {
+    // traversePaths(visitor: PathVisitor) {
+    //     return JSONMonad.new(pathTraverser(this.createRootPathArg(), visitor));
+    // }
+    visit(predicate: (arg: PathArg) => boolean, visitor: AnyMap) {
         return this.traverse(x => predicate(x)? visitor(x): 0);
     }
-    visitKeys(key: Key, visitor: (arg: Arg) => void) {
+    visitKeys(key: Key, visitor: (arg: PathArg) => void) {
         return this.traverse(x => x.key == key? visitor(x) : 0);
     }
-    visitOpts(opts: Options, visitor: (arg: Arg) => void) {
+    visitOpts(opts: Options, visitor: (arg: PathArg) => void) {
         return this.traverse(x => this.optionPredicate(x, opts)? visitor(x) : 0);
     }
-    filter(predicate: (arg: Arg) => boolean) {
+    filter(predicate: (arg: PathArg) => boolean) {
         return this.anyMap(x => predicate(x)? x.val : undefined);
     }
     anyMap(map: AnyMap) {
-        return JSONMonad.new(anyMapper(map, this.clone()));
+        return this.traverse(arg => arg.parent[arg.key] = map(arg));
     }
-    predicateMap(predicate: (arg: Arg) => boolean, map: AnyMap) {
+    predicateMap(predicate: (arg: PathArg) => boolean, map: AnyMap) {
         return this.anyMap(x => predicate(x)? map(x) : x.val);
     }
-    primMap(map: (arg: Arg<Primitive>) => Primitive) {
-        return JSONMonad.new(primMapper(map, this.clone()));
+    primMap(map: (arg: PathArg) => Primitive) {
+        return this.traverse(arg => {
+            if (typeof arg.val != "object")
+                arg.parent[arg.key] = map(arg);
+        });
     }
     keyMap(map: KeyMap) {
-        return JSONMonad.new(keyMapper(map, this.clone()));
+        return this.traverse(arg => {
+            if (Array.isArray(arg.parent)) return;
+            renameKey(arg.key, map(arg), arg.parent);
+        });
     }
     copyKey(oldKey: Key, newKey: Key) {
         return this.traverse(x => x.key == oldKey? x.parent[newKey] = x.val : 0)
@@ -174,7 +188,7 @@ export class JSONMonad extends Monad<any> {
         return [this.val];
     }
     private clone() {
-        return cloneObj(this.val);
+        return deepClone(this.val);
     }
     private static new(json: any) {
         let m = new JSONMonad({});
@@ -182,7 +196,7 @@ export class JSONMonad extends Monad<any> {
         this.id++;
         return m;
     }
-    private optionPredicate(x: Arg, {k, t, p, a}: Options) {
+    private optionPredicate(x: PathArg, {k, t, p, a}: Options) {
         return (!k || k == x.key)
             && (!t || typeof x.val == t)
             && (!p || p(x))
