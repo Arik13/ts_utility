@@ -150,7 +150,7 @@ export class JSONMonad extends Monad<any> {
     deleteKey(key: Key) {
         return this.traverse(x => x.key == key? delete x.parent[key] : 0);
     }
-    typeMap<T>(type: Types, map: AnyMap) {
+    typeMap(type: Types, map: AnyMap) {
         return this.anyMap(x => typeof x.val == type? map(x) : x.val);
     }
     booleanMap(map: (val: Arg<boolean>) => any) {
