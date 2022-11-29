@@ -72,7 +72,12 @@ export function deepCopy(obj1: any, obj2: any) {
     return obj1;
 }
 export function deepClone<T>(obj: T): T {
-    return JSON.parse(JSON.stringify(obj));
+    switch (obj) {
+        case undefined: return undefined;
+        default: return JSON.parse(JSON.stringify(obj))
+    }
+    // if (obj === null) return null;
+    // return JSON.parse(JSON.stringify(obj));
     // return deepCopy({}, obj);
 }
 export function isObject(object: any) {

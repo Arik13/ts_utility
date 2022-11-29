@@ -42,7 +42,7 @@ export declare class JSONMonad extends Monad<any> {
     keyValMap(key: Key, map: AnyMap): JSONMonad;
     renameKey(oldKey: Key, newKey: Key): JSONMonad;
     deleteKey(key: Key): JSONMonad;
-    typeMap<T>(type: Types, map: AnyMap): JSONMonad;
+    typeMap(type: Types, map: AnyMap): JSONMonad;
     booleanMap(map: (val: Arg<boolean>) => any): JSONMonad;
     booleanValMap(oldVal: boolean, newVal: boolean): JSONMonad;
     numberMap(map: (val: Arg<number>) => any): JSONMonad;
