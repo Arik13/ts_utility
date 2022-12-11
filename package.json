@@ -44,6 +44,7 @@
         "./Objects": "./lib/src/Objects/index.js",
         "./Strings": "./lib/src/Strings/index.js",
         "./Strings/numberToWord": "./lib/src/Strings/numberToWord.js",
+        "./test": "./lib/src/test.js",
         "./Types": "./lib/src/Types.js"
     },
     "typesVersions": {
@@ -110,6 +111,9 @@
             ],
             "Strings/numberToWord": [
                 "./lib/src/Strings/numberToWord.d.ts"
+            ],
+            "test": [
+                "./lib/src/test.d.ts"
             ],
             "Types": [
                 "./lib/src/Types.d.ts"

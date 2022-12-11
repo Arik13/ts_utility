@@ -24,22 +24,55 @@ export function deepEqual(object1: any, object2: any) {
     }
     return true;
 }
-export let deepMerge = (...objs: any[]) => {
-    let rootObj = {};
-    let initValueAtPath = (obj: any, path: string[], val: any) => {
-        // console.log(obj, path, val);
-        let valKey = path[path.length - 1];
-        let subObj = obj;
-        for (let i = 0; i < path.length - 1; i++) {
-            subObj = subObj[path[i]] ??= {}
-        }
-        // path.forEach(pathEl => subObj = subObj[pathEl] ??= {});
+let deleteValAtPath = (obj: any, path: string[]) => {
+    // console.log(obj, path, val);
+    let valKey = path[path.length - 1];
+    let subObj = obj;
+    for (let i = 0; i < path.length - 1; i++) {
+        subObj = subObj[path[i]]; // ??= {}
+    }
+    delete subObj[valKey];
+    // if (!subObj[valKey]) subObj[valKey] = val
+    // else if ((Array.isArray(subObj[valKey]) != Array.isArray(val))) {
+    //     subObj[valKey] = val;
+    // }
+}
+let initContainerAtPath = (obj: any, path: string[], val: any) => {
+    // console.log(obj, path, val);
+    let valKey = path[path.length - 1];
+    let subObj = obj;
+    for (let i = 0; i < path.length - 1; i++) {
+        subObj = subObj[path[i]]; // ??= {}
+    }
+    if (!subObj[valKey]) subObj[valKey] = val
+    else if ((Array.isArray(subObj[valKey]) != Array.isArray(val))) {
         subObj[valKey] = val;
     }
+}
+let initValueAtPath = (obj: any, path: string[], val: any) => {
+    // console.log(obj, path, val);
+    let valKey = path[path.length - 1];
+    let subObj = obj;
+    for (let i = 0; i < path.length - 1; i++) {
+        subObj = subObj[path[i]] ??= {}
+    }
+    subObj[valKey] = val;
+}
+export let deepMerge = (...objs: any[]) => {
+    let rootObj = {};
     objs.forEach(obj => {
         new JSONMonad(obj)
             .traverse(x => {
-                if (typeof x.val === "string" || typeof x.val === "number" || typeof x.val === "boolean") {
+                if (x.val == null) {
+                    deleteValAtPath(rootObj, x.path);
+                }
+                else if (Array.isArray(x.val)) {
+                    initContainerAtPath(rootObj, x.path, []);
+                }
+                else if (typeof x.val == "object") {
+                    initContainerAtPath(rootObj, x.path, {});
+                }
+                else if (typeof x.val === "string" || typeof x.val === "number" || typeof x.val === "boolean") {
                     try {
                         initValueAtPath(rootObj, x.path, x.val);
                     }
