@@ -82,15 +82,15 @@ class Extension<T> {
         }
     }
     union<T extends SetType>(this: T[], array: T[]) {
-        if (this[0] && prims.includes(typeof this[0]) || this[1] && prims.includes(typeof this[1])) {
-            return Array.from(new Set(this).union(new Set(array)));
-        }
-        else {
-            let a = new ArraySetData(this as IdObj[]);
-            let b = new ArraySetData(array as IdObj[]);
-            let diffSet = a.toSet().union(b.toSet());
-            return Array.from(diffSet).map(x => a.get(x) ?? b.get(x));
-        }
+        return Array.from(new Set(this).union(new Set(array)));
+        // if (this[0] && prims.includes(typeof this[0]) || this[1] && prims.includes(typeof this[1])) {
+        // }
+        // else {
+        //     let a = new ArraySetData(this as IdObj[]);
+        //     let b = new ArraySetData(array as IdObj[]);
+        //     let diffSet = a.toSet().union(b.toSet());
+        //     return Array.from(diffSet).map(x => a.get(x) ?? b.get(x));
+        // }
     }
     unique<T extends SetType>(this: T[]) {
         if (this[0] && prims.includes(typeof this[0]) || this[1] && prims.includes(typeof this[1])) {

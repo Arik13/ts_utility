@@ -13,7 +13,7 @@ declare class Extension<T> {
     diff<T extends SetType>(this: T[], array: T[]): T[] | IdObj[];
     symDiff<T extends SetType>(this: T[], array: T[]): IdObj[] | T[];
     intersect<T extends SetType>(this: T[], array: T[]): IdObj[] | T[];
-    union<T extends SetType>(this: T[], array: T[]): IdObj[] | T[];
+    union<T extends SetType>(this: T[], array: T[]): T[];
     unique<T extends SetType>(this: T[]): IdObj[] | T[];
 }
 declare global {
