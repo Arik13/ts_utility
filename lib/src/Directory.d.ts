@@ -29,8 +29,10 @@ export declare class DirectoryMap {
     mapAssets<T>(cb: (dir: Directory, dirMap?: DirectoryMap) => T, rootID?: string): T[];
     add(dir: Directory): Directory;
     set(dir: Directory): Directory;
+    replace(idOrPath: string, dir: Directory): void;
     rename(id: string, name: string): void;
     get(idOrPath: string): Directory;
+    getParent(idOrPath: string): Directory;
     has(idOrPath: string): boolean;
     map<T>(cb: (dir: Directory) => T, idOrPath?: string): T[];
     delete(id: string): void;

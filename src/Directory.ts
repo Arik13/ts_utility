@@ -112,6 +112,13 @@ export class DirectoryMap {
         this.sort(parent.id);
         return dir;
     }
+    replace(idOrPath: string, dir: Directory) {
+        let parent = this.getParent(idOrPath);
+        if (!parent) return;
+        let i = parent.children.findIndex(x => x.path === dir.path);
+        parent.children[i] = dir;
+        dir.parentID = parent.id;
+    }
     // update(dir: Directory) {
     //
     // }
@@ -127,6 +134,11 @@ export class DirectoryMap {
     }
     get(idOrPath: string) {
         return this.idMap.get(idOrPath) ?? this.pathMap.get(idOrPath);
+    }
+    getParent(idOrPath: string) {
+        let dir = this.get(idOrPath);
+        if (dir.parentID === null) return;
+        return this.get(dir.parentID);
     }
     has(idOrPath: string) {
         return this.idMap.has(idOrPath) || this.pathMap.has(idOrPath);
