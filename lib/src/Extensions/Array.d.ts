@@ -11,10 +11,10 @@ declare class Extension<T> {
     equals(this: T[], b: any[], pred?: (a: any, b: any) => boolean): boolean;
     remove(this: T[], pred: (value: T, index: number, array: T[]) => boolean): T;
     diff<T extends SetType>(this: T[], array: T[]): T[];
-    symDiff<T extends SetType>(this: T[], array: T[]): IdObj[] | T[];
-    intersect<T extends SetType>(this: T[], array: T[]): IdObj[] | T[];
+    symDiff<T extends SetType>(this: T[], array: T[]): T[];
+    intersect<T extends SetType>(this: T[], array: T[]): T[];
     union<T extends SetType>(this: T[], array: T[]): T[];
-    unique<T extends SetType>(this: T[]): IdObj[] | T[];
+    unique<T extends SetType>(this: T[]): T[];
 }
 declare global {
     interface Array<T> extends Extension<T> {
