@@ -10,7 +10,7 @@ declare class Extension<T> {
     merge<U>(this: T[], array: U[]): (T | U)[][];
     equals(this: T[], b: any[], pred?: (a: any, b: any) => boolean): boolean;
     remove(this: T[], pred: (value: T, index: number, array: T[]) => boolean): T;
-    diff<T extends SetType>(this: T[], array: T[]): T[] | IdObj[];
+    diff<T extends SetType>(this: T[], array: T[]): T[];
     symDiff<T extends SetType>(this: T[], array: T[]): IdObj[] | T[];
     intersect<T extends SetType>(this: T[], array: T[]): IdObj[] | T[];
     union<T extends SetType>(this: T[], array: T[]): T[];
