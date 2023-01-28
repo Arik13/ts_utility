@@ -1,9 +1,5 @@
 import { genID } from "./Functions";
 
-// export enum PERMISSION_LEVEL {
-//     GM,
-//     PLAYER,
-// }
 export interface Permission {
     level: number;
     exceptions: string[];
@@ -11,18 +7,6 @@ export interface Permission {
 export interface Permissions {
     visible: Permission;
 }
-// export enum ASSET_NAME {
-//     FALSEY,
-//     DIRECTORY,
-//     IMAGE,
-//     COMPONENT_DEFINITION,
-//     SCRIPT,
-//     LOCATION,
-//     TOKEN,
-//     STATE_OBJECT,
-//     STATE_OBJECT_TEMPLATE,
-// }
-
 export interface Directory {
     id?: string;
     name: string;
@@ -34,16 +18,13 @@ export interface Directory {
     base?: string;
     ext?: string;
     permissions: Permissions;
-    // type: ASSET_NAME;
 }
-
 let defaultPermissions = (): Permissions => ({
     visible: {
         level: 0,
         exceptions: [],
     }
 })
-
 export class DirectoryMap {
     root: Directory;
     idMap = new Map<string, Directory>();
@@ -119,9 +100,6 @@ export class DirectoryMap {
         parent.children[i] = dir;
         dir.parentID = parent.id;
     }
-    // update(dir: Directory) {
-    //
-    // }
     rename(id: string, name: string) {
         let dir = this.get(id);
         dir.name = name;
@@ -188,7 +166,7 @@ export class DirectoryMap {
             children: [],
         });
     }
-    // // PERMISSIONS
+    // PERMISSIONS
     // setVisiblityLevel(dirID: string, level: PERMISSION_LEVEL) {
     //     this.setPermission(dirID, "visible", level);
     // }

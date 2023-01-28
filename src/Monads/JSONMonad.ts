@@ -92,18 +92,22 @@ let renameKey = (oldKey: Key, newKey: Key, obj: any) => {
 
 export class JSONMonad extends Monad<any> {
     static id = 0;
-    constructor(json: any) {super(deepClone(json))}
+    dontClone: boolean = false;
+    constructor(json: any, dontClone?: boolean) {
+        super(dontClone? json : deepClone(json));
+        this.dontClone = dontClone;
+    }
     map(map: AnyMap) {
-        return JSONMonad.new(map(this.clone()));
+        return JSONMonad.new(map(this.get()), this.dontClone);
     }
     // traverse(visitor: AnyMap) {
     //     return JSONMonad.new(traverser(this.clone(), null, null, visitor));
     // }
     private createRootPathArg(): PathArg {
-        return {root: this.clone(), val: this.clone(), path: [], key: null, parent: null};
+        return {root: this.get(), val: this.get(), path: [], key: null, parent: null};
     }
     traverse(visitor: PathVisitor) {
-        return JSONMonad.new(pathTraverser(this.createRootPathArg(), visitor));
+        return JSONMonad.new(pathTraverser(this.createRootPathArg(), visitor), this.dontClone);
     }
     // traversePaths(visitor: PathVisitor) {
     //     return JSONMonad.new(pathTraverser(this.createRootPathArg(), visitor));
@@ -187,11 +191,11 @@ export class JSONMonad extends Monad<any> {
         }
         return [this.val];
     }
-    private clone() {
-        return deepClone(this.val);
+    private get() {
+        return this.dontClone? this.val : deepClone(this.val);
     }
-    private static new(json: any) {
-        let m = new JSONMonad({});
+    private static new(json: any, dontClone: boolean) {
+        let m = new JSONMonad({}, dontClone);
         m.val = json;
         this.id++;
         return m;
