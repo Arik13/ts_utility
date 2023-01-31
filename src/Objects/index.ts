@@ -24,7 +24,7 @@ export function deepEqual(object1: any, object2: any) {
     }
     return true;
 }
-let deleteValAtPath = (obj: any, path: string[]) => {
+export let deleteValAtPath = (obj: any, path: string[]) => {
     // console.log(obj, path, val);
     let valKey = path[path.length - 1];
     let subObj = obj;
@@ -37,7 +37,15 @@ let deleteValAtPath = (obj: any, path: string[]) => {
     //     subObj[valKey] = val;
     // }
 }
-let initContainerAtPath = (obj: any, path: string[], val: any) => {
+export let objectFromPath = (path: string) => {
+    let pathArray = path.split(".");
+    let object = {};
+    let subObject: any = object;
+    let lastKey = pathArray.pop();
+    pathArray.forEach(pathSeg => subObject = subObject[pathSeg] = {});
+    return {object, subObject, lastKey};
+}
+export let initContainerAtPath = (obj: any, path: string[], val: any) => {
     // console.log(obj, path, val);
     let valKey = path[path.length - 1];
     let subObj = obj;
@@ -49,7 +57,7 @@ let initContainerAtPath = (obj: any, path: string[], val: any) => {
         subObj[valKey] = val;
     }
 }
-let initValueAtPath = (obj: any, path: string[], val: any) => {
+export let initValueAtPath = (obj: any, path: string[], val: any) => {
     // console.log(obj, path, val);
     let valKey = path[path.length - 1];
     let subObj = obj;
