@@ -1,7 +1,7 @@
 import * as util from "util";
 import * as uuid from "short-uuid";
 
-export const genID = () => uuid.generate();
+export const genID = (prefix: string = "") => `${prefix}${uuid.generate()}`;
 
 export function deeplog(...args: any[]) {
     console.info(util.formatWithOptions({ colors: true, depth: 100 }, "%O", ...args));
