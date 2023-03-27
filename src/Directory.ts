@@ -95,7 +95,7 @@ export class DirectoryMap {
     }
     replace(idOrPath: string, dir: Directory) {
         let parent = this.getParent(idOrPath);
-        if (!parent) return;
+        if (!parent) throw new Error(`Can not replace ${idOrPath}`);
         let i = parent.children.findIndex(x => x.path === dir.path);
         parent.children[i] = dir;
         dir.parentID = parent.id;
