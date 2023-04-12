@@ -93,12 +93,12 @@ export class DirectoryMap {
         this.sort(parent.id);
         return dir;
     }
-    replace(idOrPath: string, dir: Directory) {
-        let parent = this.getParent(idOrPath);
-        if (!parent) throw new Error(`Can not replace ${idOrPath}`);
-        let i = parent.children.findIndex(x => x.path === dir.path);
-        parent.children[i] = dir;
+    replace(dir: Directory) {
+        let parent = this.getParent(dir.path);
+        if (!parent) throw new Error(`Can not replace ${dir.path}`);
+        this.delete(dir.path);
         dir.parentID = parent.id;
+        this.set(dir);
     }
     rename(id: string, name: string) {
         let dir = this.get(id);
