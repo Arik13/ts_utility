@@ -18,7 +18,7 @@ interface Options {
     a?: boolean,
 }
 
-let pathTraverser = (arg: PathArg, visitor: PathVisitor) => {
+export let traverse = (arg: PathArg, visitor: PathVisitor) => {
     if (!arg.val || typeof arg.val != "object") return arg.val;
 
     for (let key in arg.val) {
@@ -31,7 +31,7 @@ let pathTraverser = (arg: PathArg, visitor: PathVisitor) => {
             root: arg.root,
         };
         visitor(newArg);
-        pathTraverser(newArg, visitor);
+        traverse(newArg, visitor);
         arg.path.pop();
     }
     return arg.val;
@@ -107,7 +107,7 @@ export class JSONMonad extends Monad<any> {
         return {root: this.get(), val: this.get(), path: [], key: null, parent: null};
     }
     traverse(visitor: PathVisitor) {
-        return JSONMonad.new(pathTraverser(this.createRootPathArg(), visitor), this.dontClone);
+        return JSONMonad.new(traverse(this.createRootPathArg(), visitor), this.dontClone);
     }
     visit(predicate: (arg: PathArg) => boolean, visitor: AnyMap) {
         return this.traverse(x => predicate(x)? visitor(x): 0);
