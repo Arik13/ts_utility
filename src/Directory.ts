@@ -14,6 +14,7 @@ export interface Directory {
     children: Directory[];
     itemID: string;
     isOpen?: boolean;
+    isSelected?: boolean;
     path?: string;
     base?: string;
     ext?: string;
